@@ -1,0 +1,22 @@
+[
+  "<q-select v-model=\"model\" outlined :options=\"options\" hint=\"說明\" label=\"outlined\" />",
+  "<q-select v-model=\"model\" outlined stack-label hint=\"display-value可以自訂呈現\" label=\"Standard\" :display-value=\"`${model ? model : '請選擇一個'}`\" :options=\"options\"/>",
+  "<q-select v-model=\"model\" :options=\"options\" outlined hint=\"Disable\" disable />",
+  "<q-select v-model=\"model\" :options=\"options\" outlined hint=\"Readonly\" readonly />",
+  "<q-select v-model=\"model\" :options=\"options\" outlined hint=\"Disable and readonly\" disable readonly />",
+  "<q-select v-model=\"model\" outlined :display-value=\"`${model ? model : '請選擇一個'}`\" :options=\"options\" />",
+  "<q-select v-model=\"selected\" outlined clearable :options=\"options\" :rules=\"[(val) => !!val]\" />",
+  "<q-select\n              v-model=\"text\"\n              :options=\"options\"\n              outlined\n              placeholder=\"長度需大於10\"\n              error-message=\"長度需大於10\"\n              :rules=\"[(val) => val.length === 10]\"\n            />",
+  "<q-select outlined clearable v-model=\"multiple\" multiple :options=\"options\" label=\"Multiple\" />",
+  "<q-select v-model=\"model\" outlined :options=\"options\" hint=\"說明\" label=\"Outlined\">\n              <template v-slot:append>\n                <q-icon name=\"search\" color=\"primary\" />\n              </template>\n            </q-select>",
+  "<q-select v-model=\"model\" outlined :options=\"options\" hint=\"說明\" label=\"Outlined\" color=\"secondary\">\n              <template v-slot:append>\n                <q-icon name=\"search\" color=\"secondary\" />\n              </template>\n            </q-select>",
+  "<q-select v-model=\"model\" outlined :options=\"options\" hint=\"說明\" label=\"Outlined\" color=\"positive\">\n              <template v-slot:append>\n                <q-icon name=\"search\" color=\"positive\" />\n              </template>\n            </q-select>",
+  "<q-select v-model=\"model\" outlined :options=\"options\" label=\"Outlined\" placeholder=\"Placeholder\">\n              <template v-slot:prepend>\n                <q-icon name=\"event\" color=\"primary\" />\n              </template>\n            </q-select>",
+  "<q-select\n              v-model=\"model\"\n              outlined\n              :options=\"options\"\n              label=\"Outlined\"\n              color=\"secondary\"\n              placeholder=\"Placeholder\"\n            >\n              <template v-slot:prepend>\n                <q-icon name=\"event\" color=\"secondary\" />\n              </template>\n            </q-select>",
+  "<q-select\n              v-model=\"model\"\n              outlined\n              :options=\"options\"\n              label=\"Outlined\"\n              color=\"positive\"\n              placeholder=\"Placeholder\"\n            >\n              <template v-slot:prepend>\n                <q-icon name=\"event\" color=\"positive\" />\n              </template>\n            </q-select>",
+  "<q-select v-model=\"model\" outlined :options=\"options\" dense label=\"Outlined\" placeholder=\"Placeholder\" />",
+  "<q-select\n              v-model=\"model\"\n              outlined\n              :options=\"options\"\n              dense\n              options-dense\n              label=\"Outlined\"\n              placeholder=\"Placeholder\"\n            />",
+  "<q-select\n              outlined\n              v-model=\"model\"\n              use-input\n              hide-selected\n              fill-input\n              input-debounce=\"0\"\n              :options=\"option\"\n              @filter=\"filterFn\"\n              hint=\"最少輸入兩個字可以搜尋下拉選單的內容, 如：Google\"\n              style=\"width: 100%; padding-bottom: 32px\"\n            >\n              <template v-slot:no-option>\n                <q-item>\n                  <q-item-section class=\"text-grey\"> No results </q-item-section>\n                </q-item>\n              </template>\n            </q-select>",
+  "<div style=\"max-width: 100%\">\n              <q-input v-model=\"text\" outlined type=\"textarea\" />\n            </div>",
+  " <div class=\"q-pa-md\" style=\"max-width: 100%\">\n                <q-input v-model=\"text2\" outlined  autogrow type=\"textarea\" />\n              </div>"
+]

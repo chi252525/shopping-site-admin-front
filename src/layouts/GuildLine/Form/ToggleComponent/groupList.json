@@ -1,0 +1,9 @@
+[
+  "<div class=\"col guide-toggle-default\">\n          <div class=\"q-ml-sm toggle-title\">Default</div>\n          <q-toggle v-model=\"confirm\" label=\"On\" color=\"info\" />\n        </div>",
+  "<div class=\"col guide-toggle-grizzle\">\n          <div class=\"q-ml-sm toggle-title\">Collor Grey</div>\n          <q-toggle v-model=\"confirm\" label=\"On\" color=\"grey\" />\n        </div>",
+  "<div class=\"col guide-toggle-warning\">\n          <div class=\"q-ml-sm toggle-title\">Color Yellow (warning)</div>\n          <q-toggle v-model=\"confirm\" label=\"On\" color=\"warning\" />\n        </div>",
+  "<div class=\"col guide-toggle-primary\">\n          <div class=\"q-ml-sm toggle-title\">Color Primary</div>\n          <q-toggle v-model=\"confirm\" label=\"On\" color=\"primary\" />\n        </div>",
+  "<div class=\"col guide-toggle-secondary\">\n          <div class=\"q-ml-sm toggle-title\">Color Secondary</div>\n          <q-toggle v-model=\"confirm\" label=\"On\" color=\"secondary\" />\n        </div>",
+  "<div class=\"col guide-toggle-positive\">\n          <div class=\"q-ml-sm toggle-title\">Color Positive</div>\n          <q-toggle v-model=\"confirm\" label=\"On\" color=\"positive\" />\n        </div>",
+  "<div class=\"col guide-toggle-accent\">\n          <div class=\"q-ml-sm toggle-title\">Color Accent</div>\n          <q-toggle v-model=\"confirm\" label=\"On\" color=\"accent\" />\n        </div>"
+]
