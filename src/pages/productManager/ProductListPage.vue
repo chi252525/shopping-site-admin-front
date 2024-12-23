@@ -1,5 +1,5 @@
 <template>
-  <q-page class="flex flex-center">
+  <q-page class="q-mt-md q-pa-lg" justify="center">
     <q-form>
       <q-row class="q-gutter-md flex flex-center">
         <q-input v-model="name" outlined placeholder="BaseSku" />
@@ -57,7 +57,7 @@
       :rows="rowData"
       :columns="columnData"
       row-key="index"
-      class="guide-table"
+      class="guide-table q-mt-md"
       style="height: 500px"
       :loading="loading"
     >
@@ -94,7 +94,13 @@
       </template>
     </q-table>
 
-    <q-pagination v-model="current" :max="5" direction-links />
+    <q-pagination
+      class="q-mt-md"
+      justify="center"
+      v-model="current"
+      :max="5"
+      direction-links
+    />
   </q-page>
 </template>
 

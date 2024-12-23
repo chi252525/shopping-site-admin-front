@@ -22,18 +22,31 @@
     <div>
       <GuildLineController />
     </div>
-    <q-drawer v-model="drawer" show-if-above bordered>
-      <q-list>
-        <q-item clickable v-ripple :to="'/dashboard'">
-          <q-item-section> DashBoard</q-item-section>
-        </q-item>
-        <q-item clickable v-ripple :to="'/product-management'">
-          <q-item-section> 商品管理 </q-item-section>
-        </q-item>
-        <q-item clickable v-ripple :to="'/order-management'">
-          <q-item-section> 訂單管理</q-item-section>
-        </q-item>
-      </q-list>
+    <q-drawer
+      v-model="drawer"
+      show-if-above
+      bordered
+      :mini="miniState"
+      @mouseover="miniState = false"
+      @mouseout="miniState = true"
+      :width="200"
+      :breakpoint="500"
+      class="bg-grey-3"
+    >
+      <q-scroll-area class="fit" :horizontal-thumb-style="{ opacity: '0' }">
+        <q-list padding>
+          <q-item clickable v-ripple :to="'/dashboard'">
+            <q-icon name="star" /><q-item-section> DashBoard</q-item-section>
+          </q-item>
+          <q-item clickable v-ripple :to="'/product-management'">
+            <q-icon name="star" /><q-item-section> 商品管理 </q-item-section>
+          </q-item>
+          <q-separator />
+          <q-item clickable v-ripple :to="'/order-management'">
+            <q-icon name="star" /><q-item-section> 訂單管理</q-item-section>
+          </q-item>
+        </q-list>
+      </q-scroll-area>
     </q-drawer>
 
     <q-page-container>
@@ -65,6 +78,7 @@
 <script lang="ts">
 import { ref } from 'vue';
 const drawer = ref(false);
+const miniState = ref(false);
 </script>
 <script setup lang="ts">
 // import { getCurrentInstance } from 'vue';
