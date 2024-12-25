@@ -1,31 +1,80 @@
 import { boot } from 'quasar/wrappers';
-import axios, { AxiosInstance } from 'axios';
+import axios, { isAxiosError } from 'axios';
 
-declare module '@vue/runtime-core' {
-  interface ComponentCustomProperties {
-    $axios: AxiosInstance;
-    $api: AxiosInstance;
-  }
+import { useAuthStore } from 'stores/auth';
+/** 
+import { Notify } from 'quasar';
+*/
+
+const api = axios.create({
+  baseURL: process.env.VUE_APP_BACKEND_API_URL,
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Cache-Control': 'no-cache, no-store',
+  },
+});
+//Quasar Notify plugin
+/**
+function handleNotification(
+  message: string,
+  type = 'negative',
+  position:
+    | 'top'
+    | 'top-left'
+    | 'top-right'
+    | 'bottom-left'
+    | 'bottom-right'
+    | 'bottom'
+    | 'left'
+    | 'right'
+    | 'center' = 'top'
+) {
+  Notify.create({ message, type, position });
 }
-
-// Be careful when using SSR for cross-request state pollution
-// due to creating a Singleton instance here;
-// If any client changes this (global) instance, it might be a
-// good idea to move this instance creation inside of the
-// "export default () => {}" function below (which runs individually
-// for each client)
-const api = axios.create({ baseURL: 'https://api.example.com' });
-
+**/
 export default boot(({ app }) => {
-  // for use inside Vue files (Options API) through this.$axios and this.$api
-
-  app.config.globalProperties.$axios = axios;
-  // ^ ^ ^ this will allow you to use this.$axios (for Vue Options API form)
-  //       so you won't necessarily have to import axios in each vue file
-
   app.config.globalProperties.$api = api;
-  // ^ ^ ^ this will allow you to use this.$api (for Vue Options API form)
-  //       so you can easily perform requests against your app's API
+
+  api.interceptors.request.use((config) => {
+    const authStore = useAuthStore();
+    const token =
+      authStore.user.accessToken || localStorage.getItem('user.accessToken');
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    return config;
+  });
+
+  api.interceptors.response.use(
+    (response) => response,
+    async (err) => {
+      if (err.response) {
+        const { status } = err.response;
+        switch (status) {
+          case 401:
+          case 402:
+          case 403:
+          case 500:
+            console.log('伺服器出错');
+            break;
+          case 503:
+            console.log('服務失效');
+            break;
+          default:
+            console.log(`連結錯誤${status}`);
+            break;
+        }
+      } else if (err.request) {
+        console.log('攔截器請求錯誤:', err.request, err);
+      } else {
+        console.log('攔截器設置錯誤:', err.message, err);
+      }
+      return Promise.reject(err);
+    }
+  );
 });
 
-export { api };
+export { api, isAxiosError };

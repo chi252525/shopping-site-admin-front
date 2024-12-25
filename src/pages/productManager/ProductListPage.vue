@@ -106,7 +106,11 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+
+import { getProductList as getProductListApi } from  'src/api/product';
 const name = ref('');
+
+
 const current = ref(1);
 //表格載入中
 const loading = ref(false);
@@ -129,6 +133,16 @@ interface ColumnData {
   sortable?: boolean;
 }
 
+const getProductList = async () => {
+  const { data } = await getProductListApi();
+  if (data) {
+    products = [...data];
+  }
+};
+const init = async () => {
+  await getProductList();
+}
+init();
 let columnData = ref<ColumnData[]>([
   {
     name: 'edit',
