@@ -107,9 +107,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-import { getProductList as getProductListApi } from  'src/api/product';
-const name = ref('');
+import { getProductList } from 'src/api/product';
 
+const name = ref('');
 
 const current = ref(1);
 //表格載入中
@@ -132,16 +132,47 @@ interface ColumnData {
   align?: 'left' | 'right' | 'center';
   sortable?: boolean;
 }
+// 定義產品的類型
+interface ProductList {
+  modifiedAt: string;
+  modifiedBy: number;
+  createdAt: string;
+  createdBy: number;
+  stop: boolean;
+  stopDateTime: string;
+  id: string;
+  code: string;
+  name: string;
+  maxNo: number;
+  startNo: number;
+  totalNo: number;
+}
 
-const getProductList = async () => {
-  const { data } = await getProductListApi();
-  if (data) {
-    products = [...data];
+// 響應式數據
+const products = ref<ProductList | null>(null);
+
+const fetchProductList = async () => {
+  try {
+    // 傳遞必須的參數
+    const response = await getProductList({
+      startDate: '2024-01-01',
+      endDate: '2024-12-31',
+      divisionNo: '001',
+      employeeNo: '1234',
+    });
+
+    if (response && response.data) {
+      // 處理返回數據
+      products.value = response.data.content;
+    }
+  } catch (error) {
+    console.error('Error fetching product list:', error);
   }
 };
+
 const init = async () => {
-  await getProductList();
-}
+  await fetchProductList();
+};
 init();
 let columnData = ref<ColumnData[]>([
   {
