@@ -36,6 +36,7 @@
 
                   <q-card-actions align="right">
                     <q-btn flat>刪一件</q-btn>
+                    <q-btn flat>加一件</q-btn>
                   </q-card-actions>
                 </q-card>
 
@@ -47,6 +48,7 @@
 
                   <q-card-actions align="around">
                     <q-btn flat>刪一件</q-btn>
+                    <q-btn flat>加一件</q-btn>
                   </q-card-actions>
                 </q-card>
 
@@ -58,6 +60,7 @@
 
                   <q-card-actions vertical align="right">
                     <q-btn flat>刪一件</q-btn>
+                    <q-btn flat>加一件</q-btn>
                   </q-card-actions>
                 </q-card>
 
@@ -69,6 +72,7 @@
 
                   <q-card-actions vertical align="center">
                     <q-btn flat>刪一件</q-btn>
+                    <q-btn flat>加一件</q-btn>
                   </q-card-actions>
                 </q-card>
               </div>
