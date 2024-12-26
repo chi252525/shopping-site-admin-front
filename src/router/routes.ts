@@ -60,7 +60,18 @@ const routes: RouteRecordRaw[] = [
       {
         path: '',
         component: () => import('pages/productManager/ProductDetailEdit.vue'),
-        props: true, // 啟用 props 以傳遞路由參數
+        props: true,
+      },
+    ],
+  },
+  {
+    path: '/product/:id/stock-edit',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      {
+        path: '',
+        component: () => import('pages/productManager/StockEdit.vue'),
+        props: true,
       },
     ],
   },

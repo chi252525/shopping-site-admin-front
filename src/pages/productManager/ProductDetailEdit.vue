@@ -13,7 +13,18 @@
             <q-card-section>
               <div class="text-h6">Basic</div>
             </q-card-section>
-
+            <q-card-section class="q-pt-none">
+              <template>
+                <div class="q-pa-md">
+                  <q-uploader
+                    label="Auto Uploader"
+                    auto-upload
+                    url="http://localhost:4444/upload"
+                    multiple
+                  />
+                </div>
+              </template>
+            </q-card-section>
             <q-card-section class="q-pt-none">
               <q-input
                 v-model="inputVal"
