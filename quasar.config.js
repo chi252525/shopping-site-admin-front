@@ -8,13 +8,10 @@
 // Configuration for your app
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
 
-const {
-  configure
-} = require('quasar/wrappers');
+const { configure } = require('quasar/wrappers');
 const path = require('path');
 
-module.exports = configure(function ( /* ctx */ ) {
-  console.log('API Base URL:', process.env.VUE_APP_BACKEND_API_URL);
+module.exports = configure(function (/* ctx */) {
   return {
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
     // preFetch: true,
@@ -47,7 +44,9 @@ module.exports = configure(function ( /* ctx */ ) {
         browser: ['es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1'],
         node: 'node20',
       },
-
+      env: {
+        VUE_APP_BACKEND_API_URL: 'https://shopping-site-backend.fly.dev',
+      },
       vueRouterMode: 'hash', // available values: 'hash', 'history'
       // vueRouterBase,
       // vueDevtools,

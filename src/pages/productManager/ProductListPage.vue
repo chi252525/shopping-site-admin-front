@@ -2,12 +2,16 @@
   <q-page class="q-mt-md q-pa-lg" justify="center">
     <q-form>
       <q-row class="q-gutter-md flex flex-center">
-        <q-input v-model="formData.baseSku" outlined placeholder="BaseSku" />
-        <q-input
-          v-model="formData.productName"
-          outlined
-          placeholder="商品名稱"
+        <q-btn
+          outline
+          no-caps
+          class="guide-btn darken-hover"
+          color="positive"
+          label="新增"
+          size="lg"
         />
+        <q-input v-model="formData.baseSku" outlined placeholder="BaseSku" />
+        <q-input v-model="formData.name" outlined placeholder="商品名稱" />
         <q-select
           v-model="formData.firstCategory"
           outlined
@@ -43,12 +47,12 @@
           color="positive"
           label="查詢"
           size="lg"
+          @click="fetchProductList()"
         />
-
         <q-btn
           outline
           no-caps
-          class="guide-btn darken-hover"
+          class="guide-btn q-mt2 darken-hover"
           color="positive"
           label="同步蝦皮商品"
           size="lg"
@@ -97,14 +101,15 @@
         <q-inner-loading showing color="primary" size="42px" />
       </template>
     </q-table>
-
-    <q-pagination
-      class="q-mt-md"
-      justify="center"
-      v-model="current"
-      :max="5"
-      direction-links
-    />
+    <q-row class="q-gutter-md flex flex-center">
+      <q-pagination
+        class="q-mt-md"
+        justify="center"
+        v-model="current"
+        :max="5"
+        direction-links
+      />
+    </q-row>
   </q-page>
 </template>
 
@@ -140,22 +145,40 @@ interface ColumnData {
 
 // 初始化表單數據
 const formData = ref<FormData>({
+  name: '',
   baseSku: '',
-  productName: '',
   firstCategory: '',
   secondCategory: '',
-  startTime: '2024-01-01', // 預設日期
-  endTime: '2024-12-31', // 預設日期
+  minPrice: 0,
+  maxPrice: 0,
+  unitPrice: 0,
+  salePrice: 0,
+  discountPrice: 0,
+  inStock: true,
+  startTime: '2024-12-31T02:36:15.513Z',
+  endTime: '2024-12-31T02:36:15.513Z',
+  page: 0,
+  size: 0,
+  sort: ['baseSku'],
 });
 
 // 定義表單數據型別
 interface FormData {
-  baseSku: string;
-  productName: string;
-  firstCategory: string;
-  secondCategory: string;
+  name?: string;
+  baseSku?: string;
+  firstCategory?: string;
+  secondCategory?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  unitPrice?: number;
+  salePrice?: number;
+  discountPrice?: number;
+  inStock?: boolean;
   startTime: string;
   endTime: string;
+  page?: number;
+  size?: number;
+  sort?: string[];
 }
 
 // 響應式數據
@@ -166,9 +189,7 @@ const fetchProductList = async () => {
     // 傳遞必須的參數
     const response = await getProductList({
       baseSku: formData.value.baseSku,
-      productName: formData.value.productName,
-      firstCategory: formData.value.firstCategory,
-      secondCategory: formData.value.secondCategory,
+      name: formData.value.name,
       startTime: formData.value.startTime,
       endTime: formData.value.endTime,
     });
