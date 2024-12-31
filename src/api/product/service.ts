@@ -3,10 +3,12 @@ import { ProductList } from './type';
 import { filterRequestParams } from 'src/utils/request';
 
 const getProductList = (params: {
-  startDate: string;
-  endDate: string;
-  divisionNo: string;
-  employeeNo: string;
+  baseSku: string;
+  productName: string;
+  firstCategory: string;
+  secondCategory: string;
+  startTime: string;
+  endTime: string;
 }) => {
   const obj = filterRequestParams(params);
 
@@ -17,7 +19,7 @@ const getProductList = (params: {
     page: number;
     size: number;
     sort: string[];
-  }>('/reg/doctor-schedules/', {
+  }>('/intranet/product/list', {
     params: {
       ...obj,
       page: 0,

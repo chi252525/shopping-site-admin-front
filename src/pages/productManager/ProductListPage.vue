@@ -2,28 +2,32 @@
   <q-page class="q-mt-md q-pa-lg" justify="center">
     <q-form>
       <q-row class="q-gutter-md flex flex-center">
-        <q-input v-model="name" outlined placeholder="BaseSku" />
-        <q-input v-model="name" outlined placeholder="商品名稱" />
+        <q-input v-model="formData.baseSku" outlined placeholder="BaseSku" />
+        <q-input
+          v-model="formData.productName"
+          outlined
+          placeholder="商品名稱"
+        />
         <q-select
-          v-model="name"
+          v-model="formData.firstCategory"
           outlined
           :display-value="`${name ? name : '第一層分類'}`"
           :options="options"
         />
         <q-select
-          v-model="name"
+          v-model="formData.secondCategory"
           outlined
           :display-value="`${name ? name : '第二層分類'}`"
           :options="options"
         />
         <q-input
-          v-model="name"
+          v-model="formData.startTime"
           outlined
           label="上架時間"
           placeholder="Placeholder"
         ></q-input>
         <q-input
-          v-model="name"
+          v-model="formData.endTime"
           outlined
           label="下架時間"
           placeholder="Placeholder"
@@ -54,7 +58,7 @@
 
     <q-table
       v-model:pagination="initialPagination"
-      :rows="rowData"
+      :rows="products"
       :columns="columnData"
       row-key="index"
       class="guide-table q-mt-md"
@@ -134,36 +138,53 @@ interface ColumnData {
 }
 // 定義產品的類型
 interface ProductList {
-  modifiedAt: string;
-  modifiedBy: number;
-  createdAt: string;
-  createdBy: number;
-  stop: boolean;
-  stopDateTime: string;
-  id: string;
-  code: string;
-  name: string;
-  maxNo: number;
-  startNo: number;
-  totalNo: number;
+  baseSku: string;
+  productName: string;
+  firstCategory: string;
+  secondCategory: string;
+  startTime: string;
+  endTime: string;
+}
+
+// 初始化表單數據
+const formData = ref<FormData>({
+  baseSku: '',
+  productName: '',
+  firstCategory: '',
+  secondCategory: '',
+  startTime: '2024-01-01', // 預設日期
+  endTime: '2024-12-31', // 預設日期
+});
+
+// 定義表單數據型別
+interface FormData {
+  baseSku: string;
+  productName: string;
+  firstCategory: string;
+  secondCategory: string;
+  startTime: string;
+  endTime: string;
 }
 
 // 響應式數據
-const products = ref<ProductList | null>(null);
+const products = ref<ProductList[]>([]);
 
 const fetchProductList = async () => {
   try {
     // 傳遞必須的參數
     const response = await getProductList({
-      startDate: '2024-01-01',
-      endDate: '2024-12-31',
-      divisionNo: '001',
-      employeeNo: '1234',
+      baseSku: formData.value.baseSku,
+      productName: formData.value.productName,
+      firstCategory: formData.value.firstCategory,
+      secondCategory: formData.value.secondCategory,
+      startTime: formData.value.startTime,
+      endTime: formData.value.endTime,
     });
 
     if (response && response.data) {
       // 處理返回數據
-      products.value = response.data.content;
+      console.log('Product list:', response.data.content);
+      // products.value = response.data.content;
     }
   } catch (error) {
     console.error('Error fetching product list:', error);
@@ -273,44 +294,6 @@ let columnData = ref<ColumnData[]>([
     sortable: true,
     label: '第二層分類',
     field: 'Catagory2',
-  },
-]);
-const rowData = ref([
-  {
-    BaseSku: 'ABC123',
-    UnitPrice: 100,
-    SalePrice: 150,
-    DiscountPrice: 120,
-    InStock: true,
-    AvailableStartTime: '2024-01-01 10:00:00',
-    isShow: true,
-    AvailableEndTime: '2024-12-31 23:59:59',
-    Catagory1: '電子產品',
-    Catagory2: '手機',
-  },
-  {
-    BaseSku: 'XYZ456',
-    UnitPrice: 200,
-    SalePrice: 250,
-    DiscountPrice: 220,
-    InStock: false,
-    AvailableStartTime: '2024-05-01 10:00:00',
-    isShow: false,
-    AvailableEndTime: '2024-11-30 23:59:59',
-    Catagory1: '家電',
-    Catagory2: '冷氣機',
-  },
-  {
-    BaseSku: 'LMN789',
-    UnitPrice: 300,
-    SalePrice: 350,
-    DiscountPrice: 320,
-    InStock: true,
-    AvailableStartTime: '2024-03-01 10:00:00',
-    isShow: true,
-    AvailableEndTime: '2024-12-31 23:59:59',
-    Catagory1: '運動用品',
-    Catagory2: '健身器材',
   },
 ]);
 </script>

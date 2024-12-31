@@ -2,9 +2,10 @@ import { boot } from 'quasar/wrappers';
 import axios, { isAxiosError } from 'axios';
 
 import { useAuthStore } from 'stores/auth';
-/** 
+/**
 import { Notify } from 'quasar';
 */
+console.log('API Base URL:', process.env.VUE_APP_BACKEND_API_URL);
 
 const api = axios.create({
   baseURL: process.env.VUE_APP_BACKEND_API_URL,
