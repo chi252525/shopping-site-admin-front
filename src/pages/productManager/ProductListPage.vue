@@ -111,7 +111,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-import { getProductList } from 'src/api/product';
+import { getProductList, ProductList } from 'src/api/product';
 
 const name = ref('');
 
@@ -137,14 +137,6 @@ interface ColumnData {
   sortable?: boolean;
 }
 // 定義產品的類型
-interface ProductList {
-  baseSku: string;
-  productName: string;
-  firstCategory: string;
-  secondCategory: string;
-  startTime: string;
-  endTime: string;
-}
 
 // 初始化表單數據
 const formData = ref<FormData>({
@@ -184,7 +176,7 @@ const fetchProductList = async () => {
     if (response && response.data) {
       // 處理返回數據
       console.log('Product list:', response.data.content);
-      // products.value = response.data.content;
+      products.value = response.data.content;
     }
   } catch (error) {
     console.error('Error fetching product list:', error);

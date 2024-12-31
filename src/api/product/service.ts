@@ -13,7 +13,7 @@ const getProductList = (params: {
   const obj = filterRequestParams(params);
 
   return api.get<{
-    content: ProductList;
+    content: ProductList[];
     total_elements: number;
     total_pages: number;
     page: number;

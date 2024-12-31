@@ -19,7 +19,7 @@
 
             <q-card-section class="q-pt-none">
               <h4>商品名稱:</h4>
-              <h4>baseSku</h4>
+              <h4>baseSku:</h4>
             </q-card-section>
 
             <q-separator inset />
