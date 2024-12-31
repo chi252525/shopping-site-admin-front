@@ -158,8 +158,8 @@ const formData = ref<FormData>({
   startTime: '2024-12-31T02:36:15.513Z',
   endTime: '2024-12-31T02:36:15.513Z',
   page: 0,
-  size: 0,
-  sort: ['baseSku'],
+  size: 10,
+  sort: ['baseSku,DESC'],
 });
 
 // 定義表單數據型別
@@ -190,8 +190,8 @@ const fetchProductList = async () => {
     const response = await getProductList({
       baseSku: formData.value.baseSku,
       name: formData.value.name,
-      startTime: formData.value.startTime,
-      endTime: formData.value.endTime,
+      size: formData.value.size,
+      sort: formData.value.sort,
     });
 
     if (response && response.data) {
