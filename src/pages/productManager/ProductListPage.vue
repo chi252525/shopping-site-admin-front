@@ -101,7 +101,7 @@
         <q-inner-loading showing color="primary" size="42px" />
       </template>
     </q-table>
-    <q-row class="q-gutter-md flex flex-center">
+    <q-row class="q-gutter-md flex flex-center q-mt-md">
       <q-pagination
         class="q-mt-md"
         justify="center"
