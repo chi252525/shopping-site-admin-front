@@ -1,10 +1,8 @@
 import { boot } from 'quasar/wrappers';
 import axios, { isAxiosError } from 'axios';
 
-import { useAuthStore } from 'stores/auth';
-/**
 import { Notify } from 'quasar';
-*/
+
 console.log('API Base URL:', process.env.VUE_APP_BACKEND_API_URL);
 
 const api = axios.create({
@@ -12,12 +10,10 @@ const api = axios.create({
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
-    'Cache-Control': 'no-cache, no-store',
   },
 });
 //Quasar Notify plugin
-/**
+
 function handleNotification(
   message: string,
   type = 'negative',
@@ -34,20 +30,9 @@ function handleNotification(
 ) {
   Notify.create({ message, type, position });
 }
-**/
+
 export default boot(({ app }) => {
   app.config.globalProperties.$api = api;
-
-  api.interceptors.request.use((config) => {
-    const authStore = useAuthStore();
-    const token =
-      authStore.user.accessToken || localStorage.getItem('user.accessToken');
-    if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;
-    }
-
-    return config;
-  });
 
   api.interceptors.response.use(
     (response) => response,
@@ -59,18 +44,20 @@ export default boot(({ app }) => {
           case 402:
           case 403:
           case 500:
-            console.log('伺服器出错');
+            handleNotification('伺服器出錯', 'negative');
             break;
           case 503:
-            console.log('服務失效');
+            handleNotification('服務失效', 'negative');
             break;
           default:
-            console.log(`連結錯誤${status}`);
+            handleNotification(`連結錯誤${status}`, 'negative');
             break;
         }
       } else if (err.request) {
+        handleNotification('請求錯誤，無回應', 'negative');
         console.log('攔截器請求錯誤:', err.request, err);
       } else {
+        handleNotification(`錯誤: ${err.message}`, 'negative');
         console.log('攔截器設置錯誤:', err.message, err);
       }
       return Promise.reject(err);
