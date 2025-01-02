@@ -36,25 +36,97 @@
       <q-scroll-area class="fit" :horizontal-thumb-style="{ opacity: '0' }">
         <q-list padding>
           <q-item clickable v-ripple :to="'/dashboard'" class="items-center">
-            <q-icon name="star" class="q-mr2"/><q-item-section> DashBoard</q-item-section>
-          </q-item>
-          <q-item clickable v-ripple :to="'/product-management'" class="items-center">
-            <q-icon name="star" class="q-mr2" /><q-item-section> 商品管理 </q-item-section>
+            <q-icon name="home" />
+
+            <q-item-section> DashBoard</q-item-section>
           </q-item>
           <q-separator />
-          <q-item clickable v-ripple :to="'/order-management'" class="items-center">
-            <q-icon name="star" class="q-mr2" /><q-item-section> 訂單管理</q-item-section>
+          <q-item
+            clickable
+            v-ripple
+            :to="'/product-management'"
+            class="items-center"
+          >
+            <q-icon name="dataset" class="q-mr2" /><q-item-section>
+              商品管理
+            </q-item-section>
           </q-item>
-          <q-item clickable v-ripple :to="'/product-management'" class="items-center">
-          <q-icon name="star" class="q-mr2" /><q-item-section> 分類管理</q-item-section>
+
+          <q-item
+            clickable
+            v-ripple
+            :to="'/order-management'"
+            class="items-center"
+          >
+            <q-icon name="list_alt" class="q-mr2" /><q-item-section>
+              訂單管理</q-item-section
+            >
           </q-item>
-          <q-item clickable v-ripple :to="'/product-management'" class="items-center">
-          <q-icon name="star" class="q-mr2"/><q-item-section> 廠商管理</q-item-section>
-        </q-item>
-     <q-item clickable v-ripple :to="'/product-management'" class="items-center">
-  <q-icon name="star" class="q-mr2"/>
-  <q-item-section>出攤管理</q-item-section>
-</q-item>
+          <q-item
+            clickable
+            v-ripple
+            :to="'/product-management'"
+            class="items-center"
+          >
+            <q-icon name="category" class="q-mr2" /><q-item-section>
+              分類管理</q-item-section
+            >
+          </q-item>
+          <q-item
+            clickable
+            v-ripple
+            :to="'/product-management'"
+            class="items-center"
+          >
+            <q-icon name="emoji_people" class="q-mr2" /><q-item-section>
+              廠商管理</q-item-section
+            >
+          </q-item>
+          <q-item
+            clickable
+            v-ripple
+            :to="'/product-management'"
+            class="items-center"
+          >
+            <q-icon name="move_up" class="q-mr2" />
+            <q-item-section>出攤管理</q-item-section>
+          </q-item>
+          <q-item
+            clickable
+            v-ripple
+            :to="'/product-management'"
+            class="items-center"
+          >
+            <q-icon name="face" class="q-mr2" />
+            <q-item-section>會員管理</q-item-section>
+          </q-item>
+          <q-item
+            clickable
+            v-ripple
+            :to="'/product-management'"
+            class="items-center"
+          >
+            <q-icon name="emoji_nature" />
+            <q-item-section>優惠券管理</q-item-section>
+          </q-item>
+          <q-item
+            clickable
+            v-ripple
+            :to="'/product-management'"
+            class="items-center"
+          >
+            <q-icon name="emoji_nature" />
+            <q-item-section>活動管理</q-item-section>
+          </q-item>
+          <q-item
+            clickable
+            v-ripple
+            :to="'/product-management'"
+            class="items-center"
+          >
+            <q-icon name="logout" class="q-mr2" />
+            <q-item-section>登出</q-item-section>
+          </q-item>
         </q-list>
       </q-scroll-area>
     </q-drawer>

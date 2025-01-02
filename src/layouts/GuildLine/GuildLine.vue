@@ -7,6 +7,7 @@
         <q-btn v-close-popup flat round dense icon="close" />
       </q-toolbar>
       <q-separator />
+      <p><a href="https://fonts.google.com/icons">google icons</a></p>
       <q-card-section style="max-height: 80vh" class="scroll">
         <q-list bordered class="rounded-borders q-pb-md">
           <!-- 字級 -->

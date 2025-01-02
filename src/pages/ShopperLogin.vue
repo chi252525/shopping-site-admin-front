@@ -1,31 +1,33 @@
 <template>
   <div>
-    <q-page class="flex flex-center">
+    <q-page class="flex flex-center q-mt-md">
       <q-card class="q-pa-md" style="max-width: 400px; width: 100%">
         <!-- Logo -->
         <div class="text-center q-mb-md">
           <q-icon name="lock" size="56px" color="primary" />
-          <div class="text-h6 q-mt-sm">會員登入</div>
+          <div class="text-h6 q-mt-sm">管理員登入</div>
         </div>
 
         <!-- Login Form -->
         <q-form class="q-gutter-md q-mt-md">
           <!-- Email Input -->
           <q-input
+            v-model="email"
             filled
             label="電子郵件"
             type="email"
             required
-            :rules="[(val) => !!val || '請輸入電子郵件']"
+            :rules="[(val: string) => !!val || '請輸入電子郵件']"
           />
 
           <!-- Password Input -->
           <q-input
+            v-model="password"
             filled
             label="密碼"
             type="password"
             required
-            :rules="[(val) => !!val || '請輸入密碼']"
+            :rules="[(val: string) => !!val || '請輸入密碼']"
           />
 
           <!-- Submit Button -->
@@ -54,13 +56,21 @@
   </div>
 </template>
 
-<script>
-export default {
-  methods: {
-    googleLogin() {
-      const baseUrl = import.meta.env.VITE_API_BASE_URL;
-      window.location.href = `${baseUrl}/api/oauth2/login`;
-    },
-  },
-};
+<script setup lang="ts">
+import { ref } from 'vue';
+
+// 定義響應式變數
+const email = ref('');
+const password = ref('');
+
+// Google 登入方法
+function googleLogin(): void {
+  const baseUrl = import.meta.env.VUE_APP_BACKEND_API_URL;
+  if (!baseUrl) {
+    console.error('環境變數 VUE_APP_BACKEND_API_URL 未定義');
+    return;
+  }
+  console.log(baseUrl);
+  window.location.href = `${baseUrl}/api/oauth2/login`;
+}
 </script>
