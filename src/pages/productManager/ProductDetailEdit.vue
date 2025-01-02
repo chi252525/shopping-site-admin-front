@@ -3,12 +3,8 @@
     <q-col cols="auto" class="q-pa-md text-center">
       <h5>編輯產品</h5>
       <hr />
-      <div
-        class="q-pa-md q-mt-md flex flex-center"
-        align="center"
-        justify="center"
-      >
-        <div class="q-mt-md">
+      <div class="q-pa-md q-mt-md row">
+        <div class="col-6">
           <q-card flat bordered>
             <q-card-section>
               <div class="text-h6">基本資訊</div>
@@ -105,17 +101,14 @@
 
             <q-separator inset />
 
-            <q-card-section>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            </q-card-section>
+            <q-card-section> </q-card-section>
           </q-card>
         </div>
 
-        <div class="q-mt-md">
+        <div class="col-6 q-px-md">
           <q-card flat bordered>
             <q-card-section class="q-pt-md">
-              <div class="text-h6">基本資訊</div>
+              <div class="text-h6">規格</div>
 
               <q-select
                 v-model="inputVal"
@@ -126,17 +119,41 @@
                 class="q-mt-md"
                 :rules="[(val) => val.length === 10]"
               />
+
+              <q-btn
+                outline
+                no-caps
+                class="guide-btn darken-hover"
+                color="positive"
+                label="套入"
+                size="lg"
+              />
             </q-card-section>
 
             <q-separator inset />
 
-            <q-card-section>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            </q-card-section>
+            <q-card-section> </q-card-section>
           </q-card>
         </div>
       </div>
+      <q-row class="q-gutter-md flex flex-center">
+        <q-btn
+          outline
+          no-caps
+          class="guide-btn darken-hover"
+          color="positive"
+          label="新增或更新"
+          size="lg"
+        />
+        <q-btn
+          outline
+          no-caps
+          class="guide-btn darken-hover"
+          color="positive"
+          label="同步至蝦皮"
+          size="lg"
+        />
+      </q-row>
     </q-col>
   </q-row>
 </template>
