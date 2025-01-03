@@ -25,18 +25,24 @@
           :display-value="`${name ? name : '第二層分類'}`"
           :options="options"
         />
-        <q-input
+        <Datepicker
           v-model="formData.startTime"
+          dense
+          format="date"
           outlined
           label="上架時間"
           placeholder="Placeholder"
-        ></q-input>
-        <q-input
+        />
+
+        <Datepicker
           v-model="formData.endTime"
+          dense
+          format="date"
           outlined
           label="下架時間"
           placeholder="Placeholder"
-        ></q-input>
+        />
+
         <template v-slot:prepend>
           <q-icon name="event" color="positive" />
         </template>
@@ -120,6 +126,7 @@
 import { ref } from 'vue';
 
 import { getProductList, ProductList } from 'src/api/product';
+import Datepicker from 'src/components/Datepicker/Datepicker.vue';
 
 const name = ref('');
 
@@ -211,6 +218,7 @@ const init = async () => {
   await fetchProductList();
 };
 init();
+
 let columnData = ref<ColumnData[]>([
   {
     name: 'edit',
