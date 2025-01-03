@@ -65,6 +65,17 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
+    path: '/product/add',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      {
+        path: '',
+        component: () => import('pages/productManager/ProductDetailEdit.vue'),
+        props: true,
+      },
+    ],
+  },
+  {
     path: '/product/:id/stock-edit',
     component: () => import('layouts/MainLayout.vue'),
     children: [

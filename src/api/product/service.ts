@@ -18,7 +18,7 @@ const getProductList = (params: {
   endTime?: string;
   page?: number;
   size?: number;
-  sort?: string[];
+  sort?: string;
 }) => {
   // 過濾空值的參數
   const obj = filterRequestParams(params);
@@ -29,7 +29,7 @@ const getProductList = (params: {
     total_pages: number;
     page: number;
     size: number;
-    sort: string[];
+    sort: string;
   }>('/intranet/product/list', {
     params: {
       ...obj,

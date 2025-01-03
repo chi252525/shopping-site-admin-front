@@ -9,6 +9,7 @@
           color="positive"
           label="新增"
           size="lg"
+          :to="'/product/add'"
         />
         <q-input v-model="formData.baseSku" outlined placeholder="BaseSku" />
         <q-input v-model="formData.name" outlined placeholder="商品名稱" />
@@ -84,14 +85,16 @@
               /></router-link>
             </template>
             <template v-else-if="col.name == 'copy'">
-              <q-btn
-                size="md"
-                dense
-                class="guide-btn darken-hover"
-                outline
-                color="grey"
-                icon="file_copy"
-              ></q-btn>
+              <router-link :to="{ path: '/product/123/edit' }">
+                <q-btn
+                  size="md"
+                  dense
+                  class="guide-btn darken-hover"
+                  outline
+                  color="grey"
+                  icon="file_copy"
+                ></q-btn>
+              </router-link>
             </template>
             <template v-else>{{ col.value }}</template>
           </q-td>
@@ -159,7 +162,7 @@ const formData = ref<FormData>({
   endTime: '2024-12-31T02:36:15.513Z',
   page: 0,
   size: 10,
-  sort: ['baseSku,DESC'],
+  sort: 'baseSku,DESC',
 });
 
 // 定義表單數據型別
@@ -178,7 +181,7 @@ interface FormData {
   endTime: string;
   page?: number;
   size?: number;
-  sort?: string[];
+  sort?: string;
 }
 
 // 響應式數據
@@ -220,69 +223,69 @@ let columnData = ref<ColumnData[]>([
     field: 'copy',
   },
   {
-    name: 'BaseSku',
+    name: 'baseSku',
     required: true,
     align: 'left',
     sortable: true,
     label: 'BaseSku',
-    field: 'BaseSku',
+    field: 'baseSku',
   },
   {
-    name: 'Name',
+    name: 'name',
     required: true,
     align: 'left',
     sortable: true,
     label: '商品名稱',
-    field: 'Name',
+    field: 'name',
   },
   {
-    name: 'UnitPrice',
+    name: 'unitPrice',
     required: true,
     align: 'left',
     sortable: true,
     label: '成本',
-    field: 'UnitPrice',
+    field: 'unitPrice',
   },
   {
-    name: 'SalePrice',
+    name: 'salePrice',
     required: true,
     align: 'left',
     sortable: true,
     label: '售價',
-    field: 'SalePrice',
+    field: 'salePrice',
   },
   {
-    name: 'DiscountPrice',
+    name: 'discountPrice',
     required: true,
     align: 'left',
     sortable: true,
     label: '優惠價',
-    field: 'DiscountPrice',
+    field: 'discountPrice',
   },
   {
-    name: 'InStock',
+    name: 'inStock',
     required: true,
     align: 'left',
     sortable: true,
     label: '是否有庫存',
-    field: 'InStock',
+    field: 'inStock',
   },
   {
-    name: 'AvailableStartTime',
+    name: 'availableStartTime',
     required: true,
     align: 'left',
     sortable: true,
     label: '上架時間',
-    field: 'AvailableStartTime',
+    field: 'availableStartTime',
   },
 
   {
-    name: 'AvailableEndTime',
+    name: 'availableEndTime',
     required: true,
     align: 'left',
     sortable: true,
     label: '下架時間',
-    field: 'AvailableEndTime',
+    field: 'availableEndTime',
   },
   {
     name: 'isShow',
@@ -293,20 +296,20 @@ let columnData = ref<ColumnData[]>([
     field: 'isShow',
   },
   {
-    name: 'Catagory1',
+    name: 'firstCategory',
     required: true,
     align: 'left',
     sortable: true,
     label: '第一層分類',
-    field: 'Catagory1',
+    field: 'firstCategory',
   },
   {
-    name: 'Catagory2',
+    name: 'secondCategory',
     required: true,
     align: 'left',
     sortable: true,
     label: '第二層分類',
-    field: 'Catagory2',
+    field: 'secondCategory',
   },
 ]);
 </script>
