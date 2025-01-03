@@ -119,7 +119,15 @@
                 class="q-mt-md"
                 :rules="[(val) => val.length === 10]"
               />
-
+              <q-select
+                v-model="inputVal"
+                :options="options"
+                outlined
+                label="選擇顏色"
+                placeholder="選擇顏色"
+                class="q-mt-md"
+                :rules="[(val) => val.length === 10]"
+              />
               <q-btn
                 outline
                 no-caps
@@ -131,7 +139,7 @@
             </q-card-section>
 
             <q-separator inset />
-
+            <q-card flat bordered> 上傳圖片 </q-card>
             <q-card-section> </q-card-section>
           </q-card>
         </div>
