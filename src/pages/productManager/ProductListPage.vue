@@ -279,21 +279,21 @@ let columnData = ref<ColumnData[]>([
     field: 'inStock',
   },
   {
-    name: 'availableStartTime',
+    name: 'startTime',
     required: true,
     align: 'left',
     sortable: true,
     label: '上架時間',
-    field: 'availableStartTime',
+    field: 'startTime',
   },
 
   {
-    name: 'availableEndTime',
+    name: 'endTime',
     required: true,
     align: 'left',
     sortable: true,
     label: '下架時間',
-    field: 'availableEndTime',
+    field: 'endTime',
   },
   {
     name: 'isShow',
