@@ -71,6 +71,7 @@ const date = ref('');
 const dateFormat: IDateStringFormat = {
   dateTime: 'YYYY-MM-DD HH:mm:ss',
   dateTime8601: 'YYYY-MM-DDTHH:mm:ss.SSSZ',
+  dateTimeIso: 'YYYY-MM-DDTHH:mm:ss',
   date: 'YYYY-MM-DD',
 };
 const dateClosePopup = ref(false);

@@ -1,8 +1,8 @@
 interface ProductList {
   baseSku: string;
   name: string;
-  firstCategory: string;
-  secondCategory: string;
+  firstCategory?: { name: string; id: number };
+  secondCategory?: { name: string; id: number };
   startTime: string;
   endTime: string;
 }

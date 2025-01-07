@@ -14,21 +14,29 @@
         <q-input v-model="formData.baseSku" outlined placeholder="BaseSku" />
         <q-input v-model="formData.name" outlined placeholder="商品名稱" />
         <q-select
-          v-model="formData.firstCategory"
+          v-model="formData.firstCategory.id"
           outlined
-          :display-value="`${name ? name : '第一層分類'}`"
-          :options="options"
+          :display-value="`${
+            formData.firstCategory.name
+              ? formData.firstCategory.name
+              : '第一層分類'
+          }`"
+          :options="firstCategoryOptions"
         />
         <q-select
-          v-model="formData.secondCategory"
+          v-model="formData.secondCategory.id"
           outlined
-          :display-value="`${name ? name : '第二層分類'}`"
-          :options="options"
+          :display-value="`${
+            formData.secondCategory.name
+              ? formData.secondCategory.name
+              : '第二層分類'
+          }`"
+          :options="secondCategoryOptions"
         />
         <Datepicker
           v-model="formData.startTime"
           dense
-          format="date"
+          format="dateTimeIso"
           outlined
           label="上架時間"
           placeholder="Placeholder"
@@ -37,7 +45,7 @@
         <Datepicker
           v-model="formData.endTime"
           dense
-          format="date"
+          format="dateTimeIso"
           outlined
           label="下架時間"
           placeholder="Placeholder"
@@ -115,8 +123,9 @@
         class="q-mt-md"
         justify="center"
         v-model="current"
-        :max="5"
+        :max="totalPages"
         direction-links
+        @update:model-value="handlePageChange"
       />
     </q-row>
   </q-page>
@@ -124,16 +133,16 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-
+import { getCategoryList } from 'src/api/category';
 import { getProductList, ProductList } from 'src/api/product';
 import Datepicker from 'src/components/Datepicker/Datepicker.vue';
-
-const name = ref('');
-
+import { formatDateTime } from 'src/composable/DateUtils';
+const totalPages = ref(1);
 const current = ref(1);
 //表格載入中
 const loading = ref(false);
-const options = ref(['第一層分類', '第二層分類', '第三層分類']);
+const firstCategoryOptions = ref<{ label: string; value: number }[]>([]);
+const secondCategoryOptions = ref<{ label: string; value: number }[]>([]);
 
 //分頁資訊
 const initialPagination = ref({
@@ -152,32 +161,34 @@ interface ColumnData {
   sortable?: boolean;
 }
 // 定義產品的類型
+const currentDate = new Date();
+const formattedCurrentDate = formatDateTime(currentDate); // 格式化为 ISO 字符串
 
 // 初始化表單數據
 const formData = ref<FormData>({
   name: '',
   baseSku: '',
-  firstCategory: '',
-  secondCategory: '',
+  firstCategory: { name: '', id: 0 },
+  secondCategory: { name: '', id: 0 },
   minPrice: 0,
   maxPrice: 0,
   unitPrice: 0,
   salePrice: 0,
   discountPrice: 0,
   inStock: true,
-  startTime: '2024-12-31T02:36:15.513Z',
-  endTime: '2024-12-31T02:36:15.513Z',
-  page: 0,
+  startTime: formattedCurrentDate,
+  endTime: formattedCurrentDate,
+  page: 1,
   size: 10,
-  sort: 'baseSku,DESC',
+  sort: 'name,ASC',
 });
 
 // 定義表單數據型別
 interface FormData {
   name?: string;
   baseSku?: string;
-  firstCategory?: string;
-  secondCategory?: string;
+  firstCategory: { id: number; name: string }; // 修改为对象类型
+  secondCategory: { id: number; name: string }; // 修改为对象类型
   minPrice?: number;
   maxPrice?: number;
   unitPrice?: number;
@@ -197,24 +208,88 @@ const products = ref<ProductList[]>([]);
 const fetchProductList = async () => {
   try {
     // 傳遞必須的參數
-    const response = await getProductList({
+    const requestParams = {
       baseSku: formData.value.baseSku,
       name: formData.value.name,
+      firstCategory: formData.value.firstCategory.id,
+      secondCategory: formData.value.secondCategory.id,
+      startTime: formData.value.startTime,
+      endTime: formData.value.endTime,
       size: formData.value.size,
       sort: formData.value.sort,
-    });
+    };
+    // 打印请求参数
+    console.log('Request Params:', JSON.stringify(requestParams, null, 2));
+    const response = await getProductList(requestParams);
 
     if (response && response.data) {
       // 處理返回數據
       console.log('Product list:', response.data.content);
       products.value = response.data.content;
+      totalPages.value = response.data.total_pages;
     }
   } catch (error) {
     console.error('Error fetching product list:', error);
   }
 };
 
+// 呼叫 API 取得分類資料
+const fetchCategories = async () => {
+  try {
+    // 發送 API 請求
+    const response = await getCategoryList();
+    console.log('response', response);
+    // 檢查 API 回應
+    if (response && response.data && Array.isArray(response.data)) {
+      const categories = response.data;
+
+      console.log('Categories list:', categories);
+
+      // 更新第一層分類選項 (level = 1)
+      firstCategoryOptions.value = categories
+        .filter((category) => category.level === 1) // 過濾出 level = 1 的分類
+        .map((category) => ({
+          label: category.name,
+          value: category.id,
+        }));
+
+      // 更新第二層分類選項 (level = 2)
+      secondCategoryOptions.value = categories
+        .filter((category) => category.level === 2) // 過濾出 level = 2 的分類
+        .map((category) => ({
+          label: category.name,
+          value: category.id,
+        }));
+      if (
+        firstCategoryOptions.value.length > 0 &&
+        !formData.value.firstCategory.id
+      ) {
+        formData.value.firstCategory.id = firstCategoryOptions.value[0].value;
+        formData.value.firstCategory.name = firstCategoryOptions.value[0].label;
+      }
+
+      if (
+        secondCategoryOptions.value.length > 0 &&
+        !formData.value.secondCategory.id
+      ) {
+        formData.value.secondCategory.id = secondCategoryOptions.value[0].value;
+        formData.value.secondCategory.name =
+          secondCategoryOptions.value[0].label;
+      }
+    } else {
+      console.error('Invalid category list format:', response);
+    }
+  } catch (error) {
+    console.error('Error fetching category list:', error);
+  }
+};
+const handlePageChange = () => {
+  formData.value.page = current.value;
+  fetchProductList();
+};
+
 const init = async () => {
+  await fetchCategories();
   await fetchProductList();
 };
 init();
