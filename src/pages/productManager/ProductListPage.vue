@@ -14,21 +14,21 @@
         <q-input v-model="formData.baseSku" outlined placeholder="BaseSku" />
         <q-input v-model="formData.name" outlined placeholder="商品名稱" />
         <q-select
-          v-model="formData.firstCategory.id"
+          v-model="formData.firstCategory"
           outlined
           :display-value="`${
-            formData.firstCategory.name
-              ? formData.firstCategory.name
+            formData.firstCategory.label
+              ? formData.firstCategory.label
               : '第一層分類'
           }`"
           :options="firstCategoryOptions"
         />
         <q-select
-          v-model="formData.secondCategory.id"
+          v-model="formData.secondCategory"
           outlined
           :display-value="`${
-            formData.secondCategory.name
-              ? formData.secondCategory.name
+            formData.secondCategory.label
+              ? formData.secondCategory.label
               : '第二層分類'
           }`"
           :options="secondCategoryOptions"
@@ -168,8 +168,8 @@ const formattedCurrentDate = formatDateTime(currentDate); // 格式化为 ISO �
 const formData = ref<FormData>({
   name: '',
   baseSku: '',
-  firstCategory: { name: '', id: 0 },
-  secondCategory: { name: '', id: 0 },
+  firstCategory: { label: '', value: 0 },
+  secondCategory: { label: '', value: 0 },
   minPrice: 0,
   maxPrice: 0,
   unitPrice: 0,
@@ -187,8 +187,8 @@ const formData = ref<FormData>({
 interface FormData {
   name?: string;
   baseSku?: string;
-  firstCategory: { id: number; name: string }; // 修改为对象类型
-  secondCategory: { id: number; name: string }; // 修改为对象类型
+  firstCategory: { value: number; label: string }; // 修改为对象类型
+  secondCategory: { value: number; label: string }; // 修改为对象类型
   minPrice?: number;
   maxPrice?: number;
   unitPrice?: number;
@@ -211,8 +211,14 @@ const fetchProductList = async () => {
     const requestParams = {
       baseSku: formData.value.baseSku,
       name: formData.value.name,
-      firstCategory: formData.value.firstCategory.id,
-      secondCategory: formData.value.secondCategory.id,
+      firstCategory: {
+        label: formData.value.firstCategory.label,
+        value: formData.value.firstCategory.value,
+      },
+      secondCategory: {
+        label: formData.value.secondCategory.label,
+        value: formData.value.secondCategory.value,
+      },
       startTime: formData.value.startTime,
       endTime: formData.value.endTime,
       size: formData.value.size,
@@ -262,18 +268,21 @@ const fetchCategories = async () => {
         }));
       if (
         firstCategoryOptions.value.length > 0 &&
-        !formData.value.firstCategory.id
+        !formData.value.firstCategory.value
       ) {
-        formData.value.firstCategory.id = firstCategoryOptions.value[0].value;
-        formData.value.firstCategory.name = firstCategoryOptions.value[0].label;
+        formData.value.firstCategory.value =
+          firstCategoryOptions.value[0].value;
+        formData.value.firstCategory.label =
+          firstCategoryOptions.value[0].label;
       }
 
       if (
         secondCategoryOptions.value.length > 0 &&
-        !formData.value.secondCategory.id
+        !formData.value.secondCategory.value
       ) {
-        formData.value.secondCategory.id = secondCategoryOptions.value[0].value;
-        formData.value.secondCategory.name =
+        formData.value.secondCategory.value =
+          secondCategoryOptions.value[0].value;
+        formData.value.secondCategory.label =
           secondCategoryOptions.value[0].label;
       }
     } else {

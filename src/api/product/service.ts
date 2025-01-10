@@ -5,8 +5,8 @@ import { filterRequestParams } from 'src/utils/request';
 const getProductList = (params: {
   merchantId?: number;
   name?: string;
-  firstCategory: number;
-  secondCategory: number;
+  firstCategory: { label: string; value: number };
+  secondCategory: { label: string; value: number };
   baseSku?: string;
   minPrice?: number;
   maxPrice?: number;
