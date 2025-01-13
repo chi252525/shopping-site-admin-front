@@ -66,9 +66,7 @@ const password = ref('');
 // Google 登入方法
 function googleLogin(): void {
   console.log(process.env);
-  const baseUrl =
-    process.env.VUE_APP_BACKEND_API_URL ||
-    'https://shopping-site-backend.fly.dev';
+  const baseUrl = 'http://localhost:8080';
   if (!baseUrl) {
     console.error('環境變數 VUE_APP_BACKEND_API_URL 未定義');
     return;

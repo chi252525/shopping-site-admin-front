@@ -33,6 +33,17 @@
           }`"
           :options="secondCategoryOptions"
         />
+
+        <q-select
+          v-model="formData.thirdCategory"
+          outlined
+          :display-value="`${
+            formData.thirdCategory.label
+              ? formData.thirdCategory.label
+              : '第三層分類'
+          }`"
+          :options="thirdCategoryOptions"
+        />
         <Datepicker
           v-model="formData.startTime"
           dense
@@ -69,8 +80,9 @@
           no-caps
           class="guide-btn q-mt2 darken-hover"
           color="positive"
-          label="同步蝦皮商品"
+          label="重置"
           size="lg"
+          @click="reset()"
         />
       </q-row>
     </q-form>
@@ -110,6 +122,15 @@
                 ></q-btn>
               </router-link>
             </template>
+            <template v-else-if="col.name == 'firstCategory'">
+              {{ col.value.label }}
+            </template>
+            <template v-else-if="col.name == 'secondCategory'">
+              {{ col.value.label }}
+            </template>
+            <template v-else-if="col.name == 'thirdCategory'">
+              {{ col.value.label }}
+            </template>
             <template v-else>{{ col.value }}</template>
           </q-td>
         </q-tr>
@@ -143,7 +164,7 @@ const current = ref(1);
 const loading = ref(false);
 const firstCategoryOptions = ref<{ label: string; value: number }[]>([]);
 const secondCategoryOptions = ref<{ label: string; value: number }[]>([]);
-
+const thirdCategoryOptions = ref<{ label: string; value: number }[]>([]);
 //分頁資訊
 const initialPagination = ref({
   sortBy: 'desc',
@@ -161,22 +182,24 @@ interface ColumnData {
   sortable?: boolean;
 }
 // 定義產品的類型
+const pastDate = new Date('1999-01-01');
 const currentDate = new Date();
 const formattedCurrentDate = formatDateTime(currentDate); // 格式化为 ISO 字符串
-
+const formattedPastDate = formatDateTime(pastDate);
 // 初始化表單數據
 const formData = ref<FormData>({
   name: '',
   baseSku: '',
   firstCategory: { label: '', value: 0 },
   secondCategory: { label: '', value: 0 },
+  thirdCategory: { label: '', value: 0 },
   minPrice: 0,
   maxPrice: 0,
   unitPrice: 0,
   salePrice: 0,
   discountPrice: 0,
   inStock: true,
-  startTime: formattedCurrentDate,
+  startTime: formattedPastDate,
   endTime: formattedCurrentDate,
   page: 1,
   size: 10,
@@ -187,8 +210,9 @@ const formData = ref<FormData>({
 interface FormData {
   name?: string;
   baseSku?: string;
-  firstCategory: { value: number; label: string }; // 修改为对象类型
-  secondCategory: { value: number; label: string }; // 修改为对象类型
+  firstCategory: { value: number; label: string };
+  secondCategory: { value: number; label: string };
+  thirdCategory: { value: number; label: string };
   minPrice?: number;
   maxPrice?: number;
   unitPrice?: number;
@@ -211,14 +235,9 @@ const fetchProductList = async () => {
     const requestParams = {
       baseSku: formData.value.baseSku,
       name: formData.value.name,
-      firstCategory: {
-        label: formData.value.firstCategory.label,
-        value: formData.value.firstCategory.value,
-      },
-      secondCategory: {
-        label: formData.value.secondCategory.label,
-        value: formData.value.secondCategory.value,
-      },
+      firstCategory: formData.value.firstCategory.value,
+      secondCategory: formData.value.secondCategory.value,
+      thirdCategory: formData.value.thirdCategory.value,
       startTime: formData.value.startTime,
       endTime: formData.value.endTime,
       size: formData.value.size,
@@ -239,6 +258,26 @@ const fetchProductList = async () => {
   }
 };
 
+const reset = () => {
+  Object.assign(formData.value, {
+    name: '',
+    baseSku: '',
+    firstCategory: { label: '', value: 0 },
+    secondCategory: { label: '', value: 0 },
+    thirdCategory: { label: '', value: 0 },
+    minPrice: 0,
+    maxPrice: 0,
+    unitPrice: 0,
+    salePrice: 0,
+    discountPrice: 0,
+    inStock: true,
+    startTime: formattedPastDate,
+    endTime: formattedCurrentDate,
+    page: 1,
+    size: 10,
+    sort: 'name,ASC',
+  });
+};
 // 呼叫 API 取得分類資料
 const fetchCategories = async () => {
   try {
@@ -266,6 +305,13 @@ const fetchCategories = async () => {
           label: category.name,
           value: category.id,
         }));
+
+      thirdCategoryOptions.value = categories
+        .filter((category) => category.level === 3) // 過濾出 level = 3 的分類
+        .map((category) => ({
+          label: category.name,
+          value: category.id,
+        }));
       if (
         firstCategoryOptions.value.length > 0 &&
         !formData.value.firstCategory.value
@@ -284,6 +330,16 @@ const fetchCategories = async () => {
           secondCategoryOptions.value[0].value;
         formData.value.secondCategory.label =
           secondCategoryOptions.value[0].label;
+      }
+
+      if (
+        thirdCategoryOptions.value.length > 0 &&
+        !formData.value.thirdCategory.value
+      ) {
+        formData.value.thirdCategory.value =
+          thirdCategoryOptions.value[0].value;
+        formData.value.thirdCategory.label =
+          thirdCategoryOptions.value[0].label;
       }
     } else {
       console.error('Invalid category list format:', response);
@@ -359,7 +415,7 @@ let columnData = ref<ColumnData[]>([
     required: true,
     align: 'left',
     sortable: true,
-    label: '是否有庫存',
+    label: '是否已到貨',
     field: 'inStock',
   },
   {
@@ -402,6 +458,14 @@ let columnData = ref<ColumnData[]>([
     sortable: true,
     label: '第二層分類',
     field: 'secondCategory',
+  },
+  {
+    name: 'thirdCategory',
+    required: true,
+    align: 'left',
+    sortable: true,
+    label: '第三層分類',
+    field: 'thirdCategory',
   },
 ]);
 </script>
