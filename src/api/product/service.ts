@@ -25,8 +25,11 @@ const getProductList = (params: {
 
   return api.get<{
     content: ProductList[];
-    total_elements: number;
-    total_pages: number;
+    pageable: {
+      pageNumber: number;
+    };
+    totalElements: number;
+    totalPages: number;
     page: number;
     size: number;
     sort: string;

@@ -156,13 +156,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { getCategoryList } from 'src/api/category';
 import { getProductList, ProductList } from 'src/api/product';
 import Datepicker from 'src/components/Datepicker/Datepicker.vue';
 import { formatDateTime } from 'src/composable/DateUtils';
-const totalPages = ref(1);
-const current = ref(1);
+
+const totalPages = ref<number>(1);
+const current = ref<number>(1);
 //表格載入中
 const loading = ref(false);
 const firstCategoryOptions = ref<{ label: string; value: number }[]>([]);
@@ -170,9 +171,9 @@ const secondCategoryOptions = ref<{ label: string; value: number }[]>([]);
 const thirdCategoryOptions = ref<{ label: string; value: number }[]>([]);
 //分頁資訊
 const initialPagination = ref({
-  sortBy: 'desc',
+  sortBy: 'name,ASC',
   descending: false,
-  page: 1,
+  page: 0,
   rowsPerPage: 5,
 });
 
@@ -196,17 +197,13 @@ const formData = ref<FormData>({
   firstCategory: { label: '', value: 0 },
   secondCategory: { label: '', value: 0 },
   thirdCategory: { label: '', value: 0 },
-  minPrice: 0,
-  maxPrice: 0,
-  unitPrice: 0,
-  salePrice: 0,
   discountPrice: 0,
   inStock: true,
   startTime: formattedPastDate,
   endTime: formattedCurrentDate,
-  page: 1,
-  size: 10,
-  sort: 'name,ASC',
+  page: initialPagination.value.page,
+  size: initialPagination.value.rowsPerPage,
+  sort: initialPagination.value.sortBy,
 });
 
 // 定義表單數據型別
@@ -243,6 +240,7 @@ const fetchProductList = async () => {
       thirdCategory: formData.value.thirdCategory.value,
       startTime: formData.value.startTime,
       endTime: formData.value.endTime,
+      page: formData.value.page,
       size: formData.value.size,
       sort: formData.value.sort,
     };
@@ -252,9 +250,18 @@ const fetchProductList = async () => {
 
     if (response && response.data) {
       // 處理返回數據
-      console.log('Product list:', response.data.content);
+      console.log('Product list:', response.data);
       products.value = response.data.content;
-      totalPages.value = response.data.total_pages;
+      const pageNumber = response.data.pageable.pageNumber;
+      if (typeof pageNumber === 'number' && !isNaN(pageNumber)) {
+        current.value = pageNumber;
+      } else {
+        console.error('Invalid pageNumber:', pageNumber);
+        current.value = 1; // Set to default if invalid
+      }
+      console.log('current.value:', current.value);
+      totalPages.value = response.data.totalPages;
+      console.log('totalPages.value:', totalPages.value);
     }
   } catch (error) {
     console.error('Error fetching product list:', error);
@@ -276,7 +283,7 @@ const reset = () => {
     inStock: true,
     startTime: formattedPastDate,
     endTime: formattedCurrentDate,
-    page: 1,
+    page: 0,
     size: 10,
     sort: 'name,ASC',
   });
@@ -352,7 +359,9 @@ const fetchCategories = async () => {
   }
 };
 const handlePageChange = () => {
+  console.log('current.value:', current.value);
   formData.value.page = current.value;
+  console.log('formData.value.page', formData.value.page);
   fetchProductList();
 };
 
@@ -361,6 +370,22 @@ const init = async () => {
   await fetchProductList();
 };
 init();
+
+watch(
+  () => initialPagination.value,
+  async (newPagination, oldPagination) => {
+    // 如果頁碼或每頁數量有變動，重新發送請求
+    if (
+      newPagination.page !== oldPagination.page ||
+      newPagination.rowsPerPage !== oldPagination.rowsPerPage
+    ) {
+      formData.value.page = newPagination.page;
+      formData.value.size = newPagination.rowsPerPage;
+      await fetchProductList();
+    }
+  },
+  { deep: true } // 深度監控，確保 pagination 變化被捕獲
+);
 
 let columnData = ref<ColumnData[]>([
   {
@@ -388,6 +413,14 @@ let columnData = ref<ColumnData[]>([
     sortable: true,
     label: '商品名稱',
     field: 'name',
+  },
+  {
+    name: 'totalCost',
+    required: true,
+    align: 'left',
+    sortable: true,
+    label: '總成本',
+    field: 'totalCost',
   },
   {
     name: 'estimatedTotalProfit',
