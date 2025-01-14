@@ -34,100 +34,26 @@
       class="bg-grey-3"
     >
       <q-scroll-area class="fit" :horizontal-thumb-style="{ opacity: '0' }">
-        <q-list padding>
-          <q-item clickable v-ripple :to="'/dashboard'" class="items-center">
-            <q-icon name="home" />
-
-            <q-item-section> DashBoard</q-item-section>
-          </q-item>
+        <q-list v-if="isLoggedIn" padding>
           <q-separator />
           <q-item
+            v-for="(item, index) in menuItems"
+            :key="index"
             clickable
             v-ripple
-            :to="'/product-management'"
+            :to="item.to"
             class="items-center"
           >
-            <q-icon name="dataset" class="q-mr2" /><q-item-section>
-              商品管理
-            </q-item-section>
-          </q-item>
-
-          <q-item
-            clickable
-            v-ripple
-            :to="'/order-management'"
-            class="items-center"
-          >
-            <q-icon name="list_alt" class="q-mr2" /><q-item-section>
-              訂單管理</q-item-section
-            >
-          </q-item>
-          <q-item
-            clickable
-            v-ripple
-            :to="'/product-management'"
-            class="items-center"
-          >
-            <q-icon name="category" class="q-mr2" /><q-item-section>
-              分類管理</q-item-section
-            >
-          </q-item>
-          <q-item
-            clickable
-            v-ripple
-            :to="'/product-management'"
-            class="items-center"
-          >
-            <q-icon name="emoji_people" class="q-mr2" /><q-item-section>
-              廠商管理</q-item-section
-            >
-          </q-item>
-          <q-item
-            clickable
-            v-ripple
-            :to="'/product-management'"
-            class="items-center"
-          >
-            <q-icon name="move_up" class="q-mr2" />
-            <q-item-section>出攤管理</q-item-section>
-          </q-item>
-          <q-item
-            clickable
-            v-ripple
-            :to="'/product-management'"
-            class="items-center"
-          >
-            <q-icon name="face" class="q-mr2" />
-            <q-item-section>會員管理</q-item-section>
-          </q-item>
-          <q-item
-            clickable
-            v-ripple
-            :to="'/product-management'"
-            class="items-center"
-          >
-            <q-icon name="emoji_nature" />
-            <q-item-section>優惠券管理</q-item-section>
-          </q-item>
-          <q-item
-            clickable
-            v-ripple
-            :to="'/product-management'"
-            class="items-center"
-          >
-            <q-icon name="emoji_nature" />
-            <q-item-section>活動管理</q-item-section>
-          </q-item>
-          <q-item
-            clickable
-            v-ripple
-            :to="'/product-management'"
-            class="items-center"
-          >
-            <q-icon name="logout" class="q-mr2" />
-            <q-item-section>登出</q-item-section>
+            <q-icon :name="item.icon" class="q-mr2" />
+            <q-item-section>{{ item.text }}</q-item-section>
           </q-item>
         </q-list>
+        <q-list v-if="!isLoggedIn" padding
+          ><!-- 當用戶未登入時顯示提示 -->
+          <q-item clickable class="items-center">
+            <q-item-section>請先登入以訪問菜單</q-item-section>
+          </q-item></q-list
+        >
       </q-scroll-area>
     </q-drawer>
 
@@ -170,6 +96,22 @@ defineOptions({
 });
 // const instance = getCurrentInstance();
 // const q = instance?.appContext.config.globalProperties.$q;
+// JSON menu items
+const isLoggedIn = ref(true);
+//TODO
+// const isLoggedIn = ref(localStorage.getItem('userToken') !== null);
+const menuItems = [
+  { to: '/dashboard', icon: 'home', text: 'DashBoard' },
+  { to: '/product-management', icon: 'dataset', text: '商品管理' },
+  { to: '/order-management', icon: 'list_alt', text: '訂單管理' },
+  { to: '/product-management', icon: 'category', text: '分類管理' },
+  { to: '/product-management', icon: 'emoji_people', text: '廠商管理' },
+  { to: '/product-management', icon: 'move_up', text: '出攤管理' },
+  { to: '/product-management', icon: 'face', text: '會員管理' },
+  { to: '/product-management', icon: 'emoji_nature', text: '優惠券管理' },
+  { to: '/product-management', icon: 'emoji_nature', text: '活動管理' },
+  { to: '/login', icon: 'logout', text: '登出' },
+];
 </script>
 <style scoped>
 .avatar-container {
