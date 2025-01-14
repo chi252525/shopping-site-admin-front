@@ -131,6 +131,9 @@
             <template v-else-if="col.name == 'thirdCategory'">
               {{ col.value.label }}
             </template>
+            <template v-else-if="col.name == 'wholesaler'">
+              {{ col.value.label }}
+            </template>
             <template v-else>{{ col.value }}</template>
           </q-td>
         </q-tr>
@@ -387,11 +390,19 @@ let columnData = ref<ColumnData[]>([
     field: 'name',
   },
   {
+    name: 'estimatedTotalProfit',
+    required: true,
+    align: 'left',
+    sortable: true,
+    label: '預估總利潤',
+    field: 'estimatedTotalProfit',
+  },
+  {
     name: 'unitPrice',
     required: true,
     align: 'left',
     sortable: true,
-    label: '成本',
+    label: '單件成本',
     field: 'unitPrice',
   },
   {
@@ -399,7 +410,7 @@ let columnData = ref<ColumnData[]>([
     required: true,
     align: 'left',
     sortable: true,
-    label: '售價',
+    label: '單件售價',
     field: 'salePrice',
   },
   {
@@ -407,7 +418,7 @@ let columnData = ref<ColumnData[]>([
     required: true,
     align: 'left',
     sortable: true,
-    label: '優惠價',
+    label: '單件優惠價',
     field: 'discountPrice',
   },
   {
@@ -466,6 +477,30 @@ let columnData = ref<ColumnData[]>([
     sortable: true,
     label: '第三層分類',
     field: 'thirdCategory',
+  },
+  {
+    name: 'wholesaler',
+    required: true,
+    align: 'left',
+    sortable: true,
+    label: '批發商',
+    field: 'wholesaler',
+  },
+  {
+    name: 'isSettled',
+    required: true,
+    align: 'left',
+    sortable: true,
+    label: '是否已結清',
+    field: 'isSettled',
+  },
+  {
+    name: 'isOld',
+    required: true,
+    align: 'left',
+    sortable: true,
+    label: '是否舊貨',
+    field: 'isOld',
   },
 ]);
 </script>
