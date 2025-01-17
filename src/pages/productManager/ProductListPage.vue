@@ -161,7 +161,7 @@ import { getCategoryList } from 'src/api/category';
 import { getProductList, ProductList } from 'src/api/product';
 import Datepicker from 'src/components/Datepicker/Datepicker.vue';
 import { formatDateTime } from 'src/composable/DateUtils';
-
+import { QTableProps } from 'quasar';
 const totalPages = ref<number>(1);
 const current = ref<number>(1);
 //表格載入中
@@ -177,14 +177,6 @@ const initialPagination = ref({
   rowsPerPage: 5,
 });
 
-interface ColumnData {
-  name: string;
-  label: string;
-  field: string | ((row: unknown) => string | number | boolean);
-  required?: boolean;
-  align?: 'left' | 'right' | 'center';
-  sortable?: boolean;
-}
 // 定義產品的類型
 const pastDate = new Date('1999-01-01');
 const currentDate = new Date();
@@ -387,7 +379,11 @@ watch(
   { deep: true } // 深度監控，確保 pagination 變化被捕獲
 );
 
-let columnData = ref<ColumnData[]>([
+const getChineseYesNo = (isYes: boolean | undefined) => {
+  if (isYes === undefined) return '';
+  return isYes ? '是' : '否';
+};
+const columnData = ref<QTableProps['columns']>([
   {
     name: 'edit',
     label: '編輯',
@@ -461,6 +457,7 @@ let columnData = ref<ColumnData[]>([
     sortable: true,
     label: '是否已到貨',
     field: 'inStock',
+    format: (val: boolean | undefined) => getChineseYesNo(val),
   },
   {
     name: 'startTime',
@@ -486,6 +483,7 @@ let columnData = ref<ColumnData[]>([
     sortable: true,
     label: '顯示在前台',
     field: 'isShow',
+    format: (val: boolean | undefined) => getChineseYesNo(val),
   },
   {
     name: 'firstCategory',
@@ -526,6 +524,7 @@ let columnData = ref<ColumnData[]>([
     sortable: true,
     label: '是否已結清',
     field: 'isSettled',
+    format: (val: boolean | undefined) => getChineseYesNo(val),
   },
   {
     name: 'isOld',
@@ -534,6 +533,7 @@ let columnData = ref<ColumnData[]>([
     sortable: true,
     label: '是否舊貨',
     field: 'isOld',
+    format: (val: boolean | undefined) => getChineseYesNo(val),
   },
 ]);
 </script>

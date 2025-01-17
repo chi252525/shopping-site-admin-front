@@ -7,9 +7,11 @@
             <q-card-section>
               <div class="text-h6">基本資訊</div>
             </q-card-section>
-            <div class="q-pa-md q-mt-md row">
+
+            <div class="q-pa-md">
               <UploadFile v-model="image" />
             </div>
+
             <q-card-section class="q-pt-md">
               <q-input
                 v-model="inputVal"
@@ -163,6 +165,16 @@
                 class="q-mt-md"
                 :rules="[(val) => val.length === 10]"
               />
+            </q-card-section>
+          </q-card>
+        </div>
+        <div class="col-lg-6 col-xs-12 q-mt-md q-pa-md">
+          <q-card flat bordered>
+            <q-card-section class="q-pt-md">
+              <div class="text-h6">圖片</div>
+              <UploadFile v-model="image" />
+              <UploadFile v-model="image" />
+              <UploadFile v-model="image" />
             </q-card-section>
           </q-card>
         </div>
