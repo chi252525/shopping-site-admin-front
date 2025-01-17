@@ -1,4 +1,4 @@
-import { useDialog } from 'src/components/AlertDialog';
+import { useDialog } from 'src/composable/AlertDialog';
 import { isAxiosError } from 'axios';
 
 export const useHandleErrorMessage = () => {
