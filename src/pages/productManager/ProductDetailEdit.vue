@@ -71,6 +71,7 @@
                     : '第一層分類'
                 }`"
                 :options="firstCategoryOptions"
+                class="is_require q-mt-md"
               />
               <q-select
                 v-model="formData.secondCategory.value"
@@ -81,6 +82,7 @@
                     : '第二層分類'
                 }`"
                 :options="secondCategoryOptions"
+                class="is_require q-mt-md"
               />
 
               <q-select
@@ -92,6 +94,7 @@
                     : '第三層分類'
                 }`"
                 :options="thirdCategoryOptions"
+                class="is_require q-mt-md"
               />
               <Datepicker
                 v-model="formData.startTime"
@@ -100,6 +103,7 @@
                 outlined
                 label="上架時間"
                 placeholder="Placeholder"
+                class="is_require q-mt-md"
               />
 
               <Datepicker
@@ -109,6 +113,7 @@
                 outlined
                 label="下架時間"
                 placeholder="Placeholder"
+                class="is_require q-mt-md"
               />
               <q-select
                 v-model="formData.packageUnit"
