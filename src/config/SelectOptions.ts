@@ -1,36 +1,45 @@
 export const colorCode = [
-  { codeID: '0', codeName: '紅' },
-  { codeID: '1', codeName: '黑' },
-  { codeID: '2', codeName: '白' },
+  { codeID: 'RED', codeName: '紅' },
+  { codeID: 'BLACK', codeName: '黑' },
+  { codeID: 'WHITE', codeName: '白' },
 ];
 
 export const packageUnit = [
-  { codeID: '0', codeName: '件' },
-  { codeID: '1', codeName: '組' },
-  { codeID: '2', codeName: '袋' },
-  { codeID: '3', codeName: '頂' },
-  { codeID: '4', codeName: '盒' },
-  { codeID: '5', codeName: '包' },
+  { codeID: 'PIECE', codeName: '件' },
+  { codeID: 'SET', codeName: '組' },
+  { codeID: 'BAG', codeName: '袋' },
+  { codeID: 'TOP', codeName: '頂' },
+  { codeID: 'BOX', codeName: '盒' },
+  { codeID: 'PACK', codeName: '包' },
 ];
 
 export const productType = [
-  { codeID: '0', codeName: '上衣', detail: ['胸围', '肩宽', '袖长', '衣长'] },
   {
-    codeID: '1',
+    codeID: 'TOPS',
+    codeName: '上衣',
+    detail: ['胸围', '肩宽', '袖长', '衣长'],
+  },
+  {
+    codeID: 'PANTS',
     codeName: '長褲',
     detail: ['腰围', '臀围', '裤长', '裤脚口宽度'],
   },
-  { codeID: '2', codeName: '裙子', detail: ['腰围', '臀围', '裙长'] },
+  { codeID: 'SKIRT', codeName: '裙子', detail: ['腰围', '臀围', '裙长'] },
 ];
 
 export const size = [
-  { codeID: '0', codeName: 'S-L', detail: ['S', 'M', 'L'] },
-  { codeID: '1', codeName: 'S-XXL', detail: ['XS', 'M', 'L', 'XL', 'XXL'] },
+  { codeID: 'S_L', codeName: 'S-L', detail: ['S', 'M', 'L'] },
+  { codeID: 'S_XXL', codeName: 'S-XXL', detail: ['XS', 'M', 'L', 'XL', 'XXL'] },
   {
-    codeID: '2',
+    codeID: '90CM_150CM',
     codeName: '90cm - 150cm',
     detail: ['90cm', '100cm', '110cm', '120cm', '130cm', '140cm'],
   },
-  { codeID: '3', codeName: '120cm - 160cm', detail: [] },
-  { codeID: '3', codeName: '110cm - 160cm', detail: [] },
+  { codeID: '120CM_160CM', codeName: '120cm - 160cm', detail: [] },
+  { codeID: '110CM_160CM', codeName: '110cm - 160cm', detail: [] },
+  {
+    codeID: '66CM_90CM',
+    codeName: '66cm - 90cm',
+    detail: ['66cm', '73cm', '80cm', '90cm'],
+  },
 ];

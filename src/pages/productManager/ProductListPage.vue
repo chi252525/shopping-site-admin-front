@@ -158,6 +158,12 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { getCategoryList } from 'src/api/category';
+import {
+  updateCategoryOptions,
+  Category,
+  CategoryFormData,
+} from './helper/categoryHelper';
+
 import { getProductList, ProductList } from 'src/api/product';
 import Datepicker from 'src/components/Datepicker/Datepicker.vue';
 import { formatDateTime } from 'src/composable/DateUtils';
@@ -186,9 +192,9 @@ const formattedPastDate = formatDateTime(pastDate);
 const formData = ref<FormData>({
   name: '',
   baseSku: '',
-  firstCategory: { label: '', value: 0 },
-  secondCategory: { label: '', value: 0 },
-  thirdCategory: { label: '', value: 0 },
+  firstCategory: { value: 0, label: 'null' } as CategoryFormData,
+  secondCategory: { value: 0, label: 'null' } as CategoryFormData,
+  thirdCategory: { value: 0, label: 'null' } as CategoryFormData,
   discountPrice: 0,
   inStock: true,
   startTime: formattedPastDate,
@@ -202,9 +208,9 @@ const formData = ref<FormData>({
 interface FormData {
   name?: string;
   baseSku?: string;
-  firstCategory: { value: number; label: string };
-  secondCategory: { value: number; label: string };
-  thirdCategory: { value: number; label: string };
+  firstCategory: CategoryFormData;
+  secondCategory: CategoryFormData;
+  thirdCategory: CategoryFormData;
   minPrice?: number;
   maxPrice?: number;
   unitPrice?: number;
@@ -288,61 +294,27 @@ const fetchCategories = async () => {
     console.log('response', response);
     // 檢查 API 回應
     if (response && response.data && Array.isArray(response.data)) {
-      const categories = response.data;
+      const categories: Category[] = response.data;
 
-      console.log('Categories list:', categories);
-
-      // 更新第一層分類選項 (level = 1)
-      firstCategoryOptions.value = categories
-        .filter((category) => category.level === 1) // 過濾出 level = 1 的分類
-        .map((category) => ({
-          label: category.name,
-          value: category.id,
-        }));
-
-      // 更新第二層分類選項 (level = 2)
-      secondCategoryOptions.value = categories
-        .filter((category) => category.level === 2) // 過濾出 level = 2 的分類
-        .map((category) => ({
-          label: category.name,
-          value: category.id,
-        }));
-
-      thirdCategoryOptions.value = categories
-        .filter((category) => category.level === 3) // 過濾出 level = 3 的分類
-        .map((category) => ({
-          label: category.name,
-          value: category.id,
-        }));
-      if (
-        firstCategoryOptions.value.length > 0 &&
-        !formData.value.firstCategory.value
-      ) {
-        formData.value.firstCategory.value =
-          firstCategoryOptions.value[0].value;
-        formData.value.firstCategory.label =
-          firstCategoryOptions.value[0].label;
-      }
-
-      if (
-        secondCategoryOptions.value.length > 0 &&
-        !formData.value.secondCategory.value
-      ) {
-        formData.value.secondCategory.value =
-          secondCategoryOptions.value[0].value;
-        formData.value.secondCategory.label =
-          secondCategoryOptions.value[0].label;
-      }
-
-      if (
-        thirdCategoryOptions.value.length > 0 &&
-        !formData.value.thirdCategory.value
-      ) {
-        formData.value.thirdCategory.value =
-          thirdCategoryOptions.value[0].value;
-        formData.value.thirdCategory.label =
-          thirdCategoryOptions.value[0].label;
-      }
+      // 使用抽取的工具函數更新選項
+      updateCategoryOptions(
+        categories,
+        1,
+        firstCategoryOptions,
+        formData.value.firstCategory
+      );
+      updateCategoryOptions(
+        categories,
+        2,
+        secondCategoryOptions,
+        formData.value.secondCategory
+      );
+      updateCategoryOptions(
+        categories,
+        3,
+        thirdCategoryOptions,
+        formData.value.thirdCategory
+      );
     } else {
       console.error('Invalid category list format:', response);
     }
