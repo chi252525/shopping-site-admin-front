@@ -5,13 +5,14 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     beforeEnter: (to, from, next) => {
-      const token = to.query.token;
-      if (typeof token === 'string') {
-        // 將 token 存到 localStorage 或 Vuex
+      const urlParams = new URLSearchParams(window.location.search);
+      const token = urlParams.get('token');
+      console.log('token:', token);
+      if (token) {
         localStorage.setItem('authToken', token);
-
-        // 移除 URL 中的 token 參數
-        next({ path: '/', query: {} });
+        // 使用 pushState() 清除 URL 查詢參數
+        window.history.pushState({}, '', '/'); // 清除 URL 中的 query 參數
+        next();
       } else {
         next();
       }
@@ -21,6 +22,16 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/login',
     component: () => import('layouts/MainLayout.vue'),
+    beforeEnter: (to, from, next) => {
+      const token = localStorage.getItem('authToken');
+      if (token) {
+        localStorage.setItem('authToken', '');
+        alert('已登出 請重新登入');
+        next();
+      } else {
+        next();
+      }
+    },
     children: [{ path: '', component: () => import('pages/ShopperLogin.vue') }],
   },
   {
