@@ -1,21 +1,11 @@
 import { RouteRecordRaw } from 'vue-router';
-
+import { NavigationGuardNext } from 'vue-router';
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     beforeEnter: (to, from, next) => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const token = urlParams.get('token');
-      console.log('token:', token);
-      if (token) {
-        localStorage.setItem('authToken', token);
-        // 使用 pushState() 清除 URL 查詢參數
-        window.history.pushState({}, '', '/'); // 清除 URL 中的 query 參數
-        next();
-      } else {
-        next('/login');
-      }
+      handleAuthToken(next);
     },
     children: [{ path: '', component: () => import('pages/IndexPage.vue') }],
   },
@@ -37,6 +27,9 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/product-management',
     component: () => import('layouts/MainLayout.vue'),
+    beforeEnter: (to, from, next) => {
+      handleAuthToken(next);
+    },
     children: [
       {
         path: '',
@@ -47,6 +40,9 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/order-management',
     component: () => import('layouts/MainLayout.vue'),
+    beforeEnter: (to, from, next) => {
+      handleAuthToken(next);
+    },
     children: [
       {
         path: '',
@@ -57,6 +53,9 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/dashboard',
     component: () => import('layouts/MainLayout.vue'),
+    beforeEnter: (to, from, next) => {
+      handleAuthToken(next);
+    },
     children: [
       {
         path: '',
@@ -78,6 +77,9 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/product/add',
     component: () => import('layouts/MainLayout.vue'),
+    beforeEnter: (to, from, next) => {
+      handleAuthToken(next);
+    },
     children: [
       {
         path: '',
@@ -89,6 +91,9 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/product/:id/stock-edit',
     component: () => import('layouts/MainLayout.vue'),
+    beforeEnter: (to, from, next) => {
+      handleAuthToken(next);
+    },
     children: [
       {
         path: '',
@@ -104,3 +109,23 @@ const routes: RouteRecordRaw[] = [
 ];
 
 export default routes;
+
+function handleAuthToken(next: NavigationGuardNext) {
+  if (process.env.NODE_ENV === 'development') {
+    console.log('The environment is development');
+    next();
+  } else {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    console.log('token:', token);
+
+    if (token) {
+      localStorage.setItem('authToken', token);
+      // 使用 pushState() 清除 URL 查詢參數
+      window.history.pushState({}, '', '/');
+      next();
+    } else {
+      next('/login');
+    }
+  }
+}

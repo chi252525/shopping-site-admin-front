@@ -114,9 +114,14 @@ const menuItems = [
 ];
 
 const init = async () => {
-  const token = localStorage.getItem('authToken');
-  if (!token) {
-    isLoggedIn.value = false;
+  if (process.env.NODE_ENV === 'development') {
+    console.log('The environment is development');
+    isLoggedIn.value = true;
+  } else {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      isLoggedIn.value = false;
+    }
   }
 };
 init();

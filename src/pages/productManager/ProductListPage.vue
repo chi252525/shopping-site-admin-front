@@ -180,7 +180,7 @@ const initialPagination = ref({
   sortBy: 'name,ASC',
   descending: false,
   page: 0,
-  rowsPerPage: 5,
+  rowsPerPage: 10,
 });
 
 // 定義產品的類型
