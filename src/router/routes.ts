@@ -133,12 +133,10 @@ function handleAuthToken(next: NavigationGuardNext) {
   } else {
     const token = localStorage.getItem('authToken');
     if (token) {
-      localStorage.setItem('authToken', '');
-      alert('未授權已登出 請重新登入');
-      next('/login');
+      next();
     } else {
       alert('未授權無法進入該頁');
-      return;
+      next('/login');
     }
   }
 }
