@@ -13,13 +13,19 @@ const routes: RouteRecordRaw[] = [
     path: '/login',
     component: () => import('layouts/MainLayout.vue'),
     beforeEnter: (to, from, next) => {
-      const token = localStorage.getItem('authToken');
-      if (token) {
-        localStorage.setItem('authToken', '');
-        alert('已登出 請重新登入');
+      console.log(process.env.NODE_ENV);
+      if (process.env.NODE_ENV === 'development') {
+        console.log('The environment is development');
         next();
       } else {
-        next();
+        const token = localStorage.getItem('authToken');
+        if (token) {
+          localStorage.setItem('authToken', '');
+          alert('已登出 請重新登入');
+          next();
+        } else {
+          next();
+        }
       }
     },
     children: [{ path: '', component: () => import('pages/ShopperLogin.vue') }],
@@ -111,6 +117,7 @@ const routes: RouteRecordRaw[] = [
 export default routes;
 
 function handleAuthToken(next: NavigationGuardNext) {
+  console.log(process.env.NODE_ENV);
   if (process.env.NODE_ENV === 'development') {
     console.log('The environment is development');
     next();
