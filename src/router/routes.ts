@@ -5,7 +5,7 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     beforeEnter: (to, from, next) => {
-      handleAuthToken(next);
+      handleHomePageAuthToken(next);
     },
     children: [{ path: '', component: () => import('pages/IndexPage.vue') }],
   },
@@ -13,20 +13,7 @@ const routes: RouteRecordRaw[] = [
     path: '/login',
     component: () => import('layouts/MainLayout.vue'),
     beforeEnter: (to, from, next) => {
-      console.log(process.env.NODE_ENV);
-      if (process.env.NODE_ENV === 'development') {
-        console.log('The environment is development');
-        next();
-      } else {
-        const token = localStorage.getItem('authToken');
-        if (token) {
-          localStorage.setItem('authToken', '');
-          alert('已登出 請重新登入');
-          next();
-        } else {
-          next();
-        }
-      }
+      handleLoginPageAuthToken(next);
     },
     children: [{ path: '', component: () => import('pages/ShopperLogin.vue') }],
   },
@@ -116,7 +103,7 @@ const routes: RouteRecordRaw[] = [
 
 export default routes;
 
-function handleAuthToken(next: NavigationGuardNext) {
+function handleHomePageAuthToken(next: NavigationGuardNext) {
   console.log(process.env.NODE_ENV);
   if (process.env.NODE_ENV === 'development') {
     console.log('The environment is development');
@@ -132,7 +119,43 @@ function handleAuthToken(next: NavigationGuardNext) {
       window.history.pushState({}, '', '/');
       next();
     } else {
+      alert('授權不成功 請重新再登入一次');
       next('/login');
+    }
+  }
+}
+
+function handleAuthToken(next: NavigationGuardNext) {
+  console.log(process.env.NODE_ENV);
+  if (process.env.NODE_ENV === 'development') {
+    console.log('The environment is development');
+    next();
+  } else {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      localStorage.setItem('authToken', '');
+      alert('未授權已登出 請重新登入');
+      next('/login');
+    } else {
+      alert('未授權無法進入該頁');
+      return;
+    }
+  }
+}
+
+function handleLoginPageAuthToken(next: NavigationGuardNext) {
+  console.log(process.env.NODE_ENV);
+  if (process.env.NODE_ENV === 'development') {
+    console.log('The environment is development');
+    next();
+  } else {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      localStorage.setItem('authToken', '');
+      alert('已登出 請重新登入');
+      next();
+    } else {
+      next();
     }
   }
 }
