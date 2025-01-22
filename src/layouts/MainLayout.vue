@@ -112,6 +112,14 @@ const menuItems = [
   // { to: '/product-management', icon: 'emoji_nature', text: '活動管理' },
   { to: '/login', icon: 'logout', text: '登出' },
 ];
+
+const init = async () => {
+  const token = localStorage.getItem('authToken');
+  if (!token) {
+    isLoggedIn.value = false;
+  }
+};
+init();
 </script>
 <style scoped>
 .avatar-container {

@@ -14,7 +14,7 @@ const routes: RouteRecordRaw[] = [
         window.history.pushState({}, '', '/'); // 清除 URL 中的 query 參數
         next();
       } else {
-        next();
+        next('/login');
       }
     },
     children: [{ path: '', component: () => import('pages/IndexPage.vue') }],
