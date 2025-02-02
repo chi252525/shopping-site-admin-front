@@ -62,6 +62,15 @@
           placeholder="Placeholder"
         />
 
+        <q-select
+          v-model="formData.wholesaler"
+          outlined
+          :display-value="`${
+            formData.wholesaler.label ? formData.wholesaler.label : '廠商名稱'
+          }`"
+          :options="wholesalerOptions"
+        />
+
         <template v-slot:prepend>
           <q-icon name="event" color="positive" />
         </template>
@@ -165,6 +174,7 @@ import {
 } from './helper/categoryHelper';
 
 import { getProductList, ProductList } from 'src/api/product';
+import { getWholesalerList, WholesalerList } from 'src/api/wholesalers';
 import Datepicker from 'src/components/Datepicker/Datepicker.vue';
 import { formatDateTime } from 'src/composable/DateUtils';
 import { QTableProps } from 'quasar';
@@ -175,6 +185,7 @@ const loading = ref(false);
 const firstCategoryOptions = ref<{ label: string; value: number }[]>([]);
 const secondCategoryOptions = ref<{ label: string; value: number }[]>([]);
 const thirdCategoryOptions = ref<{ label: string; value: number }[]>([]);
+const wholesalerOptions = ref<{ label: string; value: number }[]>([]);
 //分頁資訊
 const initialPagination = ref({
   sortBy: 'name,ASC',
@@ -199,11 +210,15 @@ const formData = ref<FormData>({
   inStock: true,
   startTime: formattedPastDate,
   endTime: formattedCurrentDate,
+  wholesaler: { value: 0, label: 'null' } as WholesalerFormData,
   page: initialPagination.value.page,
   size: initialPagination.value.rowsPerPage,
   sort: initialPagination.value.sortBy,
 });
-
+interface WholesalerFormData {
+  value: number;
+  label: string;
+}
 // 定義表單數據型別
 interface FormData {
   name?: string;
@@ -217,6 +232,7 @@ interface FormData {
   salePrice?: number;
   discountPrice?: number;
   inStock?: boolean;
+  wholesaler: WholesalerFormData;
   startTime: string;
   endTime: string;
   page?: number;
@@ -286,6 +302,22 @@ const reset = () => {
     sort: 'name,ASC',
   });
 };
+
+const fetchWholesalerList = async () => {
+  try {
+    const response = await getWholesalerList();
+    if (response && response.data) {
+      const wholesalers: WholesalerList[] = response.data.content;
+      // 更新選項
+      wholesalerOptions.value = wholesalers.map((wholesaler) => ({
+        label: wholesaler.name,
+        value: wholesaler.id,
+      }));
+    }
+  } catch (error) {
+    console.error('Error fetching wholesaler list:', error);
+  }
+};
 // 呼叫 API 取得分類資料
 const fetchCategories = async () => {
   try {
@@ -332,6 +364,7 @@ const handlePageChange = () => {
 const init = async () => {
   await fetchCategories();
   await fetchProductList();
+  await fetchWholesalerList();
 };
 init();
 

@@ -144,18 +144,16 @@
               />
               <q-editor v-model="formData.description" min-height="340px" />
             </q-card-section>
-
-            <q-separator inset />
-
-            <q-card-section> </q-card-section>
           </q-card>
+
+          <q-separator inset />
         </div>
         <div class="col-lg-6 col-xs-12 q-pa-md">
           <q-card flat bordered>
             <q-card-section class="q-pt-md">
               <div class="text-h6">規格</div>
               <q-select
-                v-model="inputVal"
+                v-model="formData.attribute.size"
                 :options="size"
                 option-value="codeID"
                 option-label="codeName"
@@ -280,6 +278,7 @@ interface FormData {
   inStock?: boolean;
   startTime: string;
   endTime: string;
+  attribute: { size: number; label: string };
 }
 const futureDate = new Date('1999-01-01');
 const currentDate = new Date();
@@ -305,6 +304,7 @@ const formData = ref<FormData>({
   inStock: true,
   startTime: formattedCurrentDate,
   endTime: formattedFutureDate,
+  attribute: { size: 0, label: '' },
 });
 
 const fetchCategories = async () => {
