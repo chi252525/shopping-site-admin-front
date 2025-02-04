@@ -95,20 +95,6 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
-    path: '/product/:id/stock-edit',
-    component: () => import('layouts/MainLayout.vue'),
-    beforeEnter: (to, from, next) => {
-      handleAuthToken(next);
-    },
-    children: [
-      {
-        path: '',
-        component: () => import('pages/productManager/StockEdit.vue'),
-        props: true,
-      },
-    ],
-  },
-  {
     path: '/:catchAll(.*)*',
     component: () => import('pages/ErrorNotFound.vue'),
   },
