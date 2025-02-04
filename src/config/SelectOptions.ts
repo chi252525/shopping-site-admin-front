@@ -81,3 +81,30 @@ export const size = [
     detail: ['5', '7', '9', '11', '13', '15', '17'],
   },
 ];
+
+export const keyword = [
+  {
+    codeID: '1',
+    codeName: '鋪棉加厚',
+  },
+  {
+    codeID: '2',
+    codeName: '拉布布',
+  },
+  {
+    codeID: '3',
+    codeName: '春夏新款',
+  },
+  {
+    codeID: '4',
+    codeName: '秋冬新款',
+  },
+  {
+    codeID: '5',
+    codeName: '純棉',
+  },
+  {
+    codeID: '6',
+    codeName: '透氣',
+  },
+];

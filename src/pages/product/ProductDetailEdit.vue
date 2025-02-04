@@ -29,6 +29,15 @@
                 class="is_require q-mt-md"
               >
               </q-input>
+              <div class="d-flex flex-wrap q-mt-md">
+                <q-btn
+                  v-for="word in keyword"
+                  :key="word.codeID"
+                  @click="copyText(word.codeName)"
+                >
+                  {{ word.codeName }}
+                </q-btn>
+              </div>
               <q-input
                 v-model="formData.unitPrice"
                 outlined
@@ -251,6 +260,7 @@ import {
   packageUnit,
   productType,
   size,
+  keyword,
 } from 'src/config/SelectOptions';
 
 import UploadImage from './component/UploadImage.vue';
@@ -309,7 +319,9 @@ const formData = ref<FormData>({
   endTime: formattedFutureDate,
   attribute: { size: 0, label: '' },
 });
-
+const copyText = (text: string): void => {
+  formData.value.name += text; // 將 text 更新到 formData.name
+};
 const fetchCategories = async () => {
   try {
     // 發送 API 請求

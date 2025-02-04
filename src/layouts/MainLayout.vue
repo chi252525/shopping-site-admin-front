@@ -101,10 +101,11 @@ const isLoggedIn = ref(true);
 //TODO
 // const isLoggedIn = ref(localStorage.getItem('userToken') !== null);
 const menuItems = [
-  { to: '/dashboard', icon: 'home', text: 'DashBoard' },
+  { to: '/dashboard', icon: 'home', text: '總報表' },
   { to: '/product-management', icon: 'dataset', text: '商品管理' },
   // { to: '/order-management', icon: 'list_alt', text: '訂單管理' },
-   { to: '/category-management', icon: 'category', text: '分類管理' },
+  // { to: '/order-management', icon: 'list_alt', text: '銷貨作業' },
+  { to: '/category-management', icon: 'category', text: '分類管理' },
   // { to: '/product-management', icon: 'emoji_people', text: '廠商管理' },
   // { to: '/product-management', icon: 'move_up', text: '出攤管理' },
   // { to: '/product-management', icon: 'face', text: '會員管理' },
