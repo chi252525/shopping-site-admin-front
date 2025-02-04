@@ -26,7 +26,20 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: '',
-        component: () => import('pages/productManager/ProductListPage.vue'),
+        component: () => import('pages/product/ProductListPage.vue'),
+      },
+    ],
+  },
+  {
+    path: '/category-management',
+    component: () => import('layouts/MainLayout.vue'),
+    beforeEnter: (to, from, next) => {
+      handleAuthToken(next);
+    },
+    children: [
+      {
+        path: '',
+        component: () => import('pages/category/CategoryListPage.vue'),
       },
     ],
   },
@@ -62,7 +75,7 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: '',
-        component: () => import('pages/productManager/ProductDetailEdit.vue'),
+        component: () => import('pages/product/ProductDetailEdit.vue'),
         props: true,
       },
     ],
@@ -76,7 +89,7 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: '',
-        component: () => import('pages/productManager/ProductDetailEdit.vue'),
+        component: () => import('pages/product/ProductDetailEdit.vue'),
         props: true,
       },
     ],

@@ -10,6 +10,8 @@
 
             <div class="q-pa-md">
               <UploadFile v-model="formData.image[0]" />
+
+              <UploadImage></UploadImage>
             </div>
 
             <q-card-section class="q-pt-md">
@@ -250,12 +252,13 @@ import {
   productType,
   size,
 } from 'src/config/SelectOptions';
-import UploadFile from './component/UploadFile.vue';
+
+import UploadImage from './component/UploadImage.vue';
 const inputVal = ref('');
 const image = ref('');
 import Datepicker from 'src/components/Datepicker/Datepicker.vue';
 import { formatDateTime } from 'src/composable/DateUtils';
-import { updateCategoryOptions, Category } from './helper/categoryHelper';
+import { updateCategoryOptions, Category } from '../helper/categoryHelper';
 
 // 定義表單數據型別
 interface FormData {

@@ -70,7 +70,18 @@
           }`"
           :options="wholesalerOptions"
         />
-
+        <q-checkbox v-model="formData.inStock" label="是否已到貨" />
+        <q-checkbox
+          v-model="formData.isSettled"
+          val="line"
+          label="是否已結清款項"
+        />
+        <q-checkbox
+          v-model="formData.isShow"
+          val="line"
+          label="是否顯示在前台"
+        />
+        <q-checkbox v-model="formData.isOld" val="line" label="是否舊貨" />
         <template v-slot:prepend>
           <q-icon name="event" color="positive" />
         </template>
@@ -171,7 +182,9 @@ import {
   updateCategoryOptions,
   Category,
   CategoryFormData,
-} from './helper/categoryHelper';
+} from '../helper/categoryHelper';
+
+import { getChineseYesNo } from '../helper/stringHelper';
 
 import { getProductList, ProductList } from 'src/api/product';
 import { getWholesalerList, WholesalerList } from 'src/api/wholesalers';
@@ -203,14 +216,17 @@ const formattedPastDate = formatDateTime(pastDate);
 const formData = ref<FormData>({
   name: '',
   baseSku: '',
-  firstCategory: { value: 0, label: 'null' } as CategoryFormData,
-  secondCategory: { value: 0, label: 'null' } as CategoryFormData,
-  thirdCategory: { value: 0, label: 'null' } as CategoryFormData,
+  firstCategory: { value: 0, label: '第一層分類' } as CategoryFormData,
+  secondCategory: { value: 0, label: '第二層分類' } as CategoryFormData,
+  thirdCategory: { value: 0, label: '第三層分類' } as CategoryFormData,
   discountPrice: 0,
+  isShow: true,
   inStock: true,
+  isSettled: true,
+  isOld: false,
   startTime: formattedPastDate,
   endTime: formattedCurrentDate,
-  wholesaler: { value: 0, label: 'null' } as WholesalerFormData,
+  wholesaler: { value: 0, label: '批發商' } as WholesalerFormData,
   page: initialPagination.value.page,
   size: initialPagination.value.rowsPerPage,
   sort: initialPagination.value.sortBy,
@@ -231,7 +247,10 @@ interface FormData {
   unitPrice?: number;
   salePrice?: number;
   discountPrice?: number;
+  isShow?: boolean;
   inStock?: boolean;
+  isSettled?: boolean;
+  isOld?: boolean;
   wholesaler: WholesalerFormData;
   startTime: string;
   endTime: string;
@@ -307,7 +326,8 @@ const fetchWholesalerList = async () => {
   try {
     const response = await getWholesalerList();
     if (response && response.data) {
-      const wholesalers: WholesalerList[] = response.data.content;
+      const wholesalers: WholesalerList[] = response.data;
+      console.log('wholesalers' + wholesalers);
       // 更新選項
       wholesalerOptions.value = wholesalers.map((wholesaler) => ({
         label: wholesaler.name,
@@ -384,10 +404,6 @@ watch(
   { deep: true } // 深度監控，確保 pagination 變化被捕獲
 );
 
-const getChineseYesNo = (isYes: boolean | undefined) => {
-  if (isYes === undefined) return '';
-  return isYes ? '是' : '否';
-};
 const columnData = ref<QTableProps['columns']>([
   {
     name: 'edit',
@@ -398,6 +414,11 @@ const columnData = ref<QTableProps['columns']>([
     name: 'copy',
     label: '複製',
     field: 'copy',
+  },
+  {
+    name: 'stock',
+    label: '庫存',
+    field: 'stock',
   },
   {
     name: 'baseSku',
