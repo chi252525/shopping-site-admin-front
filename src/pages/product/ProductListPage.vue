@@ -383,8 +383,8 @@ const handlePageChange = () => {
 
 const init = async () => {
   await fetchCategories();
-  await fetchProductList();
   await fetchWholesalerList();
+  await fetchProductList();
 };
 init();
 
