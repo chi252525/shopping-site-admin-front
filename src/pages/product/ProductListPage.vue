@@ -192,7 +192,7 @@ import Datepicker from 'src/components/Datepicker/Datepicker.vue';
 import { formatDateTime } from 'src/composable/DateUtils';
 import { QTableProps } from 'quasar';
 const totalPages = ref<number>(1);
-const current = ref<number>(1);
+const current = ref<number>(0);
 //表格載入中
 const loading = ref(false);
 const firstCategoryOptions = ref<{ label: string; value: number }[]>([]);
