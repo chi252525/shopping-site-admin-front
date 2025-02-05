@@ -108,7 +108,6 @@
     </q-form>
 
     <q-table
-      v-model:pagination="initialPagination"
       :rows="products"
       :columns="columnData"
       row-key="index"
@@ -142,6 +141,16 @@
                 ></q-btn>
               </router-link>
             </template>
+            <template v-else-if="col.name == 'stock'">
+              <q-btn
+                size="md"
+                dense
+                class="guide-btn darken-hover"
+                outline
+                color="primary"
+                icon="edit"
+              ></q-btn>
+            </template>
             <template v-else-if="col.name == 'firstCategory'">
               {{ col.value.label }}
             </template>
@@ -169,7 +178,7 @@
         v-model="current"
         :max="totalPages"
         direction-links
-        @update:model-value="handlePageChange"
+        @click="handlePageChange"
       />
     </q-row>
   </q-page>
@@ -191,7 +200,7 @@ import { getWholesalerList, WholesalerList } from 'src/api/wholesalers';
 import Datepicker from 'src/components/Datepicker/Datepicker.vue';
 import { formatDateTime } from 'src/composable/DateUtils';
 import { QTableProps } from 'quasar';
-const totalPages = ref<number>(1);
+const totalPages = ref<number>(0);
 const current = ref<number>(0);
 //表格載入中
 const loading = ref(false);
@@ -219,14 +228,13 @@ const formData = ref<FormData>({
   firstCategory: { value: 0, label: '第一層分類' } as CategoryFormData,
   secondCategory: { value: 0, label: '第二層分類' } as CategoryFormData,
   thirdCategory: { value: 0, label: '第三層分類' } as CategoryFormData,
-  discountPrice: 0,
   isShow: true,
   inStock: true,
   isSettled: true,
   isOld: false,
   startTime: formattedPastDate,
   endTime: formattedCurrentDate,
-  wholesaler: { value: 0, label: '批發商' } as WholesalerFormData,
+  wholesaler: { value: 1, label: '批發商' } as WholesalerFormData,
   page: initialPagination.value.page,
   size: initialPagination.value.rowsPerPage,
   sort: initialPagination.value.sortBy,
@@ -242,11 +250,6 @@ interface FormData {
   firstCategory: CategoryFormData;
   secondCategory: CategoryFormData;
   thirdCategory: CategoryFormData;
-  minPrice?: number;
-  maxPrice?: number;
-  unitPrice?: number;
-  salePrice?: number;
-  discountPrice?: number;
   isShow?: boolean;
   inStock?: boolean;
   isSettled?: boolean;
@@ -263,6 +266,8 @@ interface FormData {
 const products = ref<ProductList[]>([]);
 
 const fetchProductList = async () => {
+  console.log('current.value' + current.value);
+  loading.value = true;
   try {
     // 傳遞必須的參數
     const requestParams = {
@@ -271,6 +276,11 @@ const fetchProductList = async () => {
       firstCategory: formData.value.firstCategory.value,
       secondCategory: formData.value.secondCategory.value,
       thirdCategory: formData.value.thirdCategory.value,
+      isShow: formData.value.isShow,
+      inStock: formData.value.inStock,
+      isSettled: formData.value.isSettled,
+      isOld: formData.value.isOld,
+      wholesalerId: formData.value.wholesaler.value,
       startTime: formData.value.startTime,
       endTime: formData.value.endTime,
       page: formData.value.page,
@@ -290,7 +300,7 @@ const fetchProductList = async () => {
         current.value = pageNumber;
       } else {
         console.error('Invalid pageNumber:', pageNumber);
-        current.value = 1; // Set to default if invalid
+        current.value = 0; // Set to default if invalid
       }
       console.log('current.value:', current.value);
       totalPages.value = response.data.totalPages;
@@ -298,6 +308,8 @@ const fetchProductList = async () => {
     }
   } catch (error) {
     console.error('Error fetching product list:', error);
+  } finally {
+    loading.value = false; // 無論成功還是失敗都會結束 loading 狀態
   }
 };
 
@@ -308,12 +320,11 @@ const reset = () => {
     firstCategory: { label: '', value: 0 },
     secondCategory: { label: '', value: 0 },
     thirdCategory: { label: '', value: 0 },
-    minPrice: 0,
-    maxPrice: 0,
-    unitPrice: 0,
-    salePrice: 0,
-    discountPrice: 0,
+    isShow: true,
     inStock: true,
+    isSettled: true,
+    isOld: false,
+    wholesaler: { label: '', value: 0 },
     startTime: formattedPastDate,
     endTime: formattedCurrentDate,
     page: 0,
@@ -433,7 +444,7 @@ const columnData = ref<QTableProps['columns']>([
     required: true,
     align: 'left',
     sortable: true,
-    label: 'BaseSku',
+    label: '自編貨號',
     field: 'baseSku',
   },
   {
