@@ -421,6 +421,14 @@ const columnData = ref<QTableProps['columns']>([
     field: 'stock',
   },
   {
+    name: 'image',
+    required: true,
+    align: 'left',
+    sortable: true,
+    label: '首圖',
+    field: 'image',
+  },
+  {
     name: 'baseSku',
     required: true,
     align: 'left',

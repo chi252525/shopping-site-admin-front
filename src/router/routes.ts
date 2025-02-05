@@ -44,6 +44,19 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
+    path: '/wholesaler-management',
+    component: () => import('layouts/MainLayout.vue'),
+    beforeEnter: (to, from, next) => {
+      handleAuthToken(next);
+    },
+    children: [
+      {
+        path: '',
+        component: () => import('pages/wholesaler/WholesalerListPage.vue'),
+      },
+    ],
+  },
+  {
     path: '/order-management',
     component: () => import('layouts/MainLayout.vue'),
     beforeEnter: (to, from, next) => {
