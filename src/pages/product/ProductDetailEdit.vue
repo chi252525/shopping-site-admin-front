@@ -193,6 +193,31 @@
                 label="套入"
                 size="lg"
               />
+
+              <div class="q-gutter-md q-mt-md">
+                <div class="q-mb-md" style="display: inline-block">紅 - 90</div>
+                <div class="q-mb-md" style="display: inline-block">
+                  <q-input
+                    type="number"
+                    filled
+                    v-model="formData.name"
+                    label="庫存"
+                  />
+                </div>
+              </div>
+              <div class="q-gutter-md q-mt-md">
+                <div class="q-mb-md" style="display: inline-block">
+                  紅 - 100
+                </div>
+                <div class="q-mb-md" style="display: inline-block">
+                  <q-input
+                    type="number"
+                    filled
+                    v-model="formData.name"
+                    label="庫存"
+                  />
+                </div>
+              </div>
             </q-card-section>
           </q-card>
         </div>
@@ -200,7 +225,7 @@
         <div class="col-lg-6 col-xs-12 q-mt-md q-pa-md">
           <q-card flat bordered>
             <q-card-section class="q-pt-md">
-              <div class="text-h6">尺寸</div>
+              <div class="text-h6">尺寸 (單位 ：ＣＭ)</div>
               <q-select
                 v-model="inputVal"
                 :options="productType"
@@ -221,6 +246,38 @@
                 label="套入"
                 size="lg"
               />
+
+              <div class="q-gutter-md q-mt-md">
+                <q-markup-table :separator="'horizontal'" flat bordered>
+                  <thead>
+                    <tr>
+                      <th class="text-left">上衣</th>
+                      <th class="text-right">胸圍</th>
+                      <th class="text-right">衣長</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="text-left">紅 - 90</td>
+                      <td class="text-right">
+                        <q-input type="number" filled v-model="formData.name" />
+                      </td>
+                      <td class="text-right">
+                        <q-input type="number" filled v-model="formData.name" />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-left">紅 - 100</td>
+                      <td class="text-right">
+                        <q-input type="number" filled v-model="formData.name" />
+                      </td>
+                      <td class="text-right">
+                        <q-input type="number" filled v-model="formData.name" />
+                      </td>
+                    </tr>
+                  </tbody>
+                </q-markup-table>
+              </div>
             </q-card-section>
           </q-card>
         </div>
