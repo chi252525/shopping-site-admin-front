@@ -1,71 +1,78 @@
 <template>
-  <div class="upload-container">
-    <input
-      type="file"
-      ref="fileInput"
-      @change="onFileChange"
-      accept="image/*"
-    />
-    <button @click="uploadImage" :disabled="!selectedFile">上傳圖片</button>
-    <div v-if="uploadProgress">
-      <p>上傳進度: {{ uploadProgress }}%</p>
+  <div>
+    <input type="file" @change="handleFileChange" />
+    <button @click="uploadImage">Upload</button>
+    
+    <!-- 顯示圖片 -->
+    <div v-if="imageUrl">
+      <h2>Uploaded Image</h2>
+      <img :src="imageUrl" alt="Uploaded Image" width="300" />
     </div>
-    <img v-if="uploadedImageUrl" :src="uploadedImageUrl" alt="Uploaded Image" />
   </div>
 </template>
 
-<script lang="ts" setup>
-import { ref } from 'vue';
-import axios from 'axios';
+<script lang="ts">
+import { defineComponent, ref } from 'vue'
+import axios from 'axios'
 
-// 定義變數
-const selectedFile = ref<File | null>(null);
-const uploadProgress = ref<number | null>(null);
-const uploadedImageUrl = ref<string | null>(null);
+export default defineComponent({
+  name: 'UploadImage',
+  setup() {
+    // 定義狀態
+    const selectedFile = ref<File | null>(null)
+    const imageUrl = ref<string | null>(null)
 
-// 處理文件變更
-const onFileChange = (event: Event) => {
-  const input = event.target as HTMLInputElement;
-  if (input.files) {
-    selectedFile.value = input.files[0];
-  }
-};
+    // 處理文件選擇
+    const handleFileChange = (event: Event) => {
+      const input = event.target as HTMLInputElement
+      if (input.files && input.files.length > 0) {
+        selectedFile.value = input.files[0]
+      }
+    }
 
-// 上傳圖片
-const uploadImage = async () => {
-  if (!selectedFile.value) return;
+    // 上傳圖片
+    const uploadImage = async () => {
+      if (!selectedFile.value) {
+        alert('Please select a file first!')
+        return
+      }
 
-  const formData = new FormData();
-  formData.append('file', selectedFile.value);
+      const formData = new FormData()
+      formData.append('file', selectedFile.value)
 
-  try {
-    const response = await axios.post('/api/upload', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-      onUploadProgress: (progressEvent) => {
-        if (progressEvent.total) {
-          uploadProgress.value = Math.round(
-            (progressEvent.loaded * 100) / progressEvent.total
-          );
-        }
-      },
-    });
-    uploadedImageUrl.value = response.data.imageUrl; // 假設後端返回圖片 URL
-  } catch (error) {
-    console.error('上傳圖片失敗', error);
-  }
-};
+      try {
+        // 假設後端 API 路徑是 '/files/upload'
+        const response = await axios.post('/files/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            // 添加認證令牌，如果需要的話
+            // 'Authorization': `Bearer ${yourAuthToken}`
+          },
+        })
+
+        // 假設後端返回的是圖片的 fileId
+        const fileId = response.data
+        // 使用 Google Drive 或你的儲存位置來生成圖片 URL
+        imageUrl.value = `https://drive.google.com/uc?id=${fileId}`
+      } catch (error) {
+        console.error('Error uploading image:', error)
+        alert('Error uploading image')
+      }
+    }
+
+    return {
+      selectedFile,
+      imageUrl,
+      handleFileChange,
+      uploadImage,
+    }
+  },
+})
 </script>
 
 <style scoped>
-.upload-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-button:disabled {
-  background-color: #ccc;
+/* 自定義樣式 */
+button {
+  margin-top: 10px;
 }
 </style>

@@ -44,6 +44,19 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
+    path: '/banner-management',
+    component: () => import('layouts/MainLayout.vue'),
+    beforeEnter: (to, from, next) => {
+      handleAuthToken(next);
+    },
+    children: [
+      {
+        path: '',
+        component: () => import('pages/banner/BannerListPage.vue'),
+      },
+    ],
+  },
+  {
     path: '/wholesaler-management',
     component: () => import('layouts/MainLayout.vue'),
     beforeEnter: (to, from, next) => {

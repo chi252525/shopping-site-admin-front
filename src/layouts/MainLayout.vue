@@ -112,7 +112,7 @@ const menuItems = [
   // { to: '/product-management', icon: 'emoji_nature', text: '優惠券管理' },
   // { to: '/product-management', icon: 'emoji_nature', text: '活動管理' },
   // { to: '/product-management', icon: 'emoji_nature', text: '權限管理' },
-  // { to: '/product-management', icon: 'emoji_nature', text: '輪播圖管理' },
+  { to: '/banner-management', icon: 'emoji_nature', text: '輪播圖管理' },
   { to: '/login', icon: 'logout', text: '登出' },
 ];
 

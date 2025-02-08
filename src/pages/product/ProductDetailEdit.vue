@@ -159,12 +159,14 @@
 
           <q-separator inset />
         </div>
+
         <div class="col-lg-6 col-xs-12 q-pa-md">
           <q-card flat bordered>
             <q-card-section class="q-pt-md">
               <div class="text-h6">規格</div>
+
               <q-select
-                v-model="formData.attribute.size"
+                v-model="formData.attribute1.size"
                 :options="size"
                 option-value="codeID"
                 option-label="codeName"
@@ -175,7 +177,7 @@
                 :rules="[(val) => val?.length === 10]"
               />
               <q-select
-                v-model="inputVal"
+                v-model="formData.attribute1.color"
                 :options="colorCode"
                 option-value="codeID"
                 option-label="codeName"
@@ -348,7 +350,8 @@ interface FormData {
   inStock?: boolean;
   startTime: string;
   endTime: string;
-  attribute: { size: number; label: string };
+  attribute1: { size: string; color: string };
+  attribute2: { size: string; color: string };
 }
 const futureDate = new Date('1999-01-01');
 const currentDate = new Date();
@@ -374,7 +377,8 @@ const formData = ref<FormData>({
   inStock: true,
   startTime: formattedCurrentDate,
   endTime: formattedFutureDate,
-  attribute: { size: 0, label: '' },
+  attribute1: { size: '', color: '' },
+  attribute2: { size: '', color: '' },
 });
 const copyText = (text: string): void => {
   formData.value.name += text; // 將 text 更新到 formData.name
